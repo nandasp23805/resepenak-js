@@ -62,5 +62,14 @@ async function loadData() {
 }
 
 
+async function confirmHapus(id) {
+  const {data , error} = await supabase.from("resepenak").delete().eq("id", id);
+  if (error) return alert("Gagal menghapus resep: " + error.message);
+  alert("Resep berhasil dihapus!");
+  loadData();
+} 
+
+
 window.simpanResep = simpanResep;
+window.confirmHapus = confirmHapus;
 loadData();
