@@ -52,7 +52,7 @@ async function loadData() {
           <p class="card-text">Langkah: ${item.steps || "-"}</p>
           <div class="d-flex justify-content-end mt-3">
             <button class="btn btn-outline-danger btn-sm" onclick="confirmHapus(${item.id})"
-              class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm">🗑️ Hapus</button>
+              class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm">Hapus</button>
           </div>
         </div>
       </div>
