@@ -12,7 +12,7 @@ async function simpanResep() {
     const steps = document.getElementById("steps").value;
 
     const { data, error } = await supabase
-        .from('resep')
+        .from('resepenak')
         .insert([
             { judul: judul, alat: alat, bahan: bahan, steps: steps }
         ])
@@ -24,7 +24,7 @@ async function simpanResep() {
 }
 
 async function loadData() {
-  const { data, error } = await supabase.from("resep").select("*");
+  const { data, error } = await supabase.from("resepenak").select("*");
   if (error) return alert("Data gagal diambil: " + error.message);
 
   const container = document.getElementById("list");
@@ -46,10 +46,10 @@ async function loadData() {
     col.innerHTML = `
       <div class="card bg-card border border-secondary shadow">
         <div class="card-body">
-          <h5 class="card-title">${item.nama_barang}</h5>
+          <h5 class="card-title">${item.judul}</h5>
           <p class="card-text">Alat: ${item.alat || "-"}</p>
           <p class="card-text">Bahan: ${item.bahan || "-"}</p>
-          <p class="card-text">Langkah: ${item.deskripsi || "-"}</p>
+          <p class="card-text">Langkah: ${item.steps || "-"}</p>
           <div class="d-flex justify-content-between mt-3">
             <button onclick="confirmHapus(${item.id})"
               class="px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm">🗑️ Hapus</button>
