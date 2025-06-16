@@ -33,7 +33,7 @@ async function loadData() {
   if (data.length === 0) {
     container.innerHTML = `
       <div class="col-12 text-center">
-        <img src="image/404.png" alt="No Recipes" class="img-fluid mb-3" style="max-width: 250px;">
+        <img src="image/404.jpg" alt="No Recipes" class="img-fluid mb-3" style="max-width: 250px;">
         <p class="text-muted">Tidak ada resep tersedia.</p>
       </div>
     `;

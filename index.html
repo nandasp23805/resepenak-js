@@ -19,12 +19,17 @@
         top: 0;
         left: 0;
         height: 100vh;
-        background-color: #343a40;
+        background-color: #ffbb00;
         padding-top: 1rem;
+        font-family: Arial, sans-serif;
+        justify-content: center;
+        align-items: center;
+
       }
       .content {
         margin-left: 250px;
       }
+      
     }
   </style>
 </head>
@@ -55,9 +60,10 @@
   <!-- Main content -->
   <main class="content p-4">
     <!-- Halaman Home -->
-    <div id="homePage">
-      <h1 class="text-center mb-4">Selamat Datang di Resep Makanan</h1>
-      <p class="text-center">Temukan dan kelola resep makanan Anda dengan mudah.</p>
+    <div id="homePage" class="text-center d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+      <img src="image/logo.png" alt="Logo" class="img-fluid mb-4" style="max-width: 300px; width: 80%; height: auto;">
+      <h1 class="mb-3">Selamat Datang di Resep Makanan</h1>
+      <p class="text-muted">Temukan dan kelola resep makanan Anda dengan mudah.</p>
     </div>
 
     <!-- Halaman Resep (form + list), disembunyikan saat awal -->
