@@ -9,15 +9,7 @@ async function simpanResep() {
     const judul = document.getElementById("judul").value;
     const alat = document.getElementById("alat").value;
     const bahan = document.getElementById("bahan").value;
-
-    // Ambil semua input langkah
-    const stepInputs = document.querySelectorAll('#stepsContainer input');
-    const steps = Array.from(stepInputs).map(i => i.value.trim()).filter(s => s).join('\n');
-
-    if (!judul || !alat || !bahan || !steps) {
-        alert("Mohon lengkapi semua kolom sebelum menyimpan.");
-        return;
-    }
+    const steps = document.getElementById("steps").value;
 
     const { data, error } = await supabase
         .from('resepenak')
@@ -25,24 +17,11 @@ async function simpanResep() {
             { judul: judul, alat: alat, bahan: bahan, steps: steps }
         ])
 
-    if (error) return alert("Gagal menambahkan resep: " + error.message);
+    if (error) return alert("Gagal menambahkan resep: " + error.message)
     alert("Resep berhasil ditambahkan!");
-
-    // Reset form
-    document.getElementById("judul").value = "";
-    document.getElementById("alat").value = "";
-    document.getElementById("bahan").value = "";
-    document.getElementById("stepsContainer").innerHTML = `
-      <div class="input-group mb-2">
-        <span class="input-group-text">1.</span>
-        <input type="text" class="form-control" placeholder="Masukkan langkah" onkeypress="tambahLangkah(event)">
-        <button type="button" class="btn btn-danger" onclick="hapusLangkah(this)">❌</button>
-      </div>
-    `;
 
     loadData();
 }
-
 
 async function loadData() {
   const { data, error } = await supabase.from("resepenak").select("*");
