@@ -5,52 +5,187 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Resep Makanan</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet"> <style>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
     body {
-      background-image: url('image/unduhan.jpg') ;
+      background-image: url('image/bg1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      margin-top: 0;
+      min-height: 100vh;
     }
     .bg-card {
       background-color: rgba(255, 255, 255, 0.9);
+      padding: 3rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      margin: 0 auto;
     }
-    .home-bg {
-      background-color: #AFEEEE;
-      background-image: url('image/bg2.png'); /* Ganti dengan URL gambar latar belakang yang diinginkan */
-      background-size: cover;
-      background-position: center;
-      width: 100%;
-      height: 100%;
-      border-radius: 10px;
+
+    #homePage {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      text-align: center;
+      color: #333;
+      padding: 20px;
+      min-height: calc(100vh - 80px);
+      background-color: transparent;
+      background-image: none;
+      border-radius: 0;
+      padding-top: 10vh;
     }
+    #homePage h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: black; /* <--- UBAH DI SINI! */
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    #homePage p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        color: black; /* <--- UBAH DI SINI! */
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    #homePage img {
+        filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+    }
+
+    /* CSS untuk sidebar (berlaku di semua ukuran layar secara default) */
+    .sidebar {
+      background-color: MediumTurquoise;
+      padding: 1rem;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      align-items: center;
+      min-height: 80px;
+    }
+
+    /* CSS untuk link di sidebar */
+    .sidebar .nav-link {
+      color: white;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      padding: 0.8rem 1rem;
+    }
+    .sidebar .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+    }
+
+    /* CSS untuk teks merek "Resep Makanan" di sidebar */
+    .sidebar .navbar-brand {
+      color: #333;
+      margin-bottom: 0 !important;
+    }
+    .sidebar .navbar-brand span {
+      font-weight: 700;
+      color: #333;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* New: Styling for the search form */
+    .sidebar .search-form {
+        display: flex;
+        align-items: center;
+        margin-left: auto; /* Push search form to the right */
+    }
+
+    .sidebar .search-form .form-control {
+        border-radius: 5px;
+        border: none;
+        padding: 0.5rem 1rem;
+        margin-right: 0.5rem;
+    }
+    .sidebar .search-form .btn {
+        border-radius: 5px;
+    }
+
+    /* Media query untuk ukuran layar desktop (min-width: 768px) */
     @media (min-width: 768px) {
       .sidebar {
-        width: 250px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100vh;
-        background-color: MediumTurquoise;
-        padding-top: 1rem;
-        font-family: 'Montserrat', sans-serif; /* <--- UBAH DI SINI */
-        justify-content: center;
+        position: static;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        flex-direction: row;
+      }
+      /* Untuk desktop, kita juga bisa menyesuaikan alignment pada ul nav-pills */
+      .sidebar .nav-pills {
+        display: flex; /* Pastikan ini flex untuk aligment item */
+        align-items: center; /* Memusatkan item nav secara vertikal */
+        height: 100%; /* Agar bisa mengisi tinggi yang tersedia */
+        flex-grow: 1; /* Allow nav-pills to grow and push search to right */
+        justify-content: flex-start; /* Align nav items to the start */
+      }
+
+      .sidebar .container-fluid {
+        flex-direction: row !important;
+        justify-content: space-between;
         align-items: center;
       }
-      .sidebar .nav-link { /* Tambahkan ini untuk menargetkan link di sidebar */
-        color: white; /* Contoh: ubah warna teks agar kontras dengan background */
-        font-weight: 500; /* Contoh: membuat teks sedikit lebih tebal */
-        transition: all 0.3s ease; /* Efek transisi saat hover */
+
+      .sidebar .navbar-brand {
+        margin-bottom: 0 !important;
       }
-      .sidebar .nav-link:hover { /* Efek hover */
-        background-color: rgba(255, 255, 255, 0.2); /* Sedikit transparan saat di-hover */
-        border-radius: 5px;
+
+      .sidebar .navbar-toggler {
+        display: none;
       }
-      .sidebar .navbar-brand span { /* Menargetkan teks "Resep Makanan" */
-        font-weight: 700; /* Lebih tebal */
-        color: #333; /* Warna teks yang lebih gelap */
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Efek bayangan teks */
+
+      .sidebar #sidebarMenu {
+        display: flex !important; /* Change to flex to align menu items and search */
+        width: auto !important;
+        justify-content: flex-end; /* Push menu items to the right */
+        align-items: center;
       }
+
+      .sidebar .nav-pills {
+        flex-direction: row !important;
+        margin-right: 1rem; /* Space between nav items and search bar */
+      }
+
+      .sidebar .nav-item {
+        margin-bottom: 0 !important;
+        margin-right: 15px;
+      }
+
+      .sidebar .nav-item:last-child {
+        margin-right: 0;
+      }
+
       .content {
-        margin-left: 250px;
+        margin-left: 0;
+        padding-top: 2rem;
       }
+      /* Ensure search form is displayed correctly on desktop */
+      .sidebar .search-form {
+        margin-left: 0; /* Reset margin-left auto for desktop */
+      }
+    }
+    /* Adjustments for smaller screens (mobile toggle menu) */
+    @media (max-width: 767.98px) {
+        .sidebar .search-form {
+            width: 100%; /* Full width for mobile search */
+            margin-top: 1rem; /* Space below menu items */
+            margin-left: 0; /* Remove auto margin for full width */
+        }
+        .sidebar #sidebarMenu {
+            flex-direction: column; /* Stack menu items and search vertically */
+            align-items: flex-start; /* Align items to the left */
+        }
+        .sidebar .nav-pills {
+            width: 100%;
+            margin-right: 0;
+            justify-content: flex-start;
+        }
     }
   </style>
 </head>
@@ -61,7 +196,7 @@
         <img src="image/nda.png" alt="Logo" style="width: 45px; height: 45px;" class="me-2">
         <span class="fs-5">Resep Makanan</span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse w-100" id="sidebarMenu">
@@ -72,16 +207,24 @@
           <li class="nav-item mb-2">
             <a href="#" class="nav-link px-3" onclick="showPage('resep')">➕ Resep</a>
           </li>
+          <li class="nav-item mb-2 d-md-none"> <div class="search-form-mobile d-flex w-100">
+                  <input class="form-control me-2" type="search" placeholder="Cari Resep..." aria-label="Search">
+                  <button class="btn btn-outline-light" type="submit">Cari</button>
+              </div>
+          </li>
         </ul>
+        <form class="d-flex search-form d-none d-md-flex"> <input class="form-control me-2" type="search" placeholder="Cari Resep..." aria-label="Search">
+            <button class="btn btn-outline-light" type="submit">Cari</button>
+        </form>
       </div>
     </div>
   </nav>
 
   <main class="content p-4">
-    <div id="homePage" class="home-bg">
+    <div id="homePage">
       <h1 class="text-center mb-4">Selamat Datang di Resep Makanan</h1>
       <img src="image/logo.png" alt="Logo" class="d-block mx-auto mb-3" style="width: 200px; height: auto;"/>
-      <p class="text-center font-family: Arial, sans-serif;">Temukan dan kelola resep makanan Anda dengan mudah.</p>
+      <p class="text-center">Temukan dan kelola resep makanan Anda dengan mudah.</p>
     </div>
 
     <div id="resepPage" style="display: none;">
@@ -115,9 +258,14 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     function showPage(page) {
-      document.getElementById('homePage').style.display = (page === 'home') ? 'block' : 'none';
+      document.getElementById('homePage').style.display = (page === 'home') ? 'flex' : 'none';
       document.getElementById('resepPage').style.display = (page === 'resep') ? 'block' : 'none';
     }
+    document.addEventListener('DOMContentLoaded', () => {
+      if (document.getElementById('homePage').style.display !== 'none' || !document.getElementById('resepPage').style.display || document.getElementById('resepPage').style.display === 'none') {
+        document.getElementById('homePage').style.display = 'flex';
+      }
+    });
   </script>
 </body>
 </html>
