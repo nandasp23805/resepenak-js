@@ -2,7 +2,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const supabase = createClient(
     "https://pcqrwkvardtgkurjugra.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImexCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
 )
 
 // Global variable to keep track of the recipe being edited
@@ -142,6 +142,7 @@ async function performSearch() {
     const searchMobileInput = document.getElementById('searchMobileInput');
 
     let searchTerm = '';
+    // Dapatkan nilai dari input yang sedang terlihat/aktif
     if (searchDesktopInput && searchDesktopInput.offsetParent !== null) {
         searchTerm = searchDesktopInput.value.trim();
     } else if (searchMobileInput && searchMobileInput.offsetParent !== null) {
@@ -195,7 +196,6 @@ async function editResep(id) {
         document.getElementById('submitButton').parentNode.appendChild(cancelButton);
     }
 
-
     // Pastikan halaman 'resep' ditampilkan agar form terlihat
     showPage('resep');
 }
@@ -211,18 +211,34 @@ window.resetForm = resetForm; // expose resetForm
 
 // Panggil loadData saat halaman pertama kali dimuat untuk menampilkan semua resep
 document.addEventListener('DOMContentLoaded', () => {
-    // Kita tidak panggil loadData di sini jika halaman home adalah default.
-    // loadData akan dipanggil oleh showPage('resep') ketika user mengklik navigasi 'Tambahkan Resep'.
-    // Ini memastikan bahwa saat halaman pertama kali dimuat, hanya homePage yang terlihat
-    // dan resepPage (dengan daftar resepnya) dimuat saat user beralih ke sana.
+    // Pastikan homePage yang aktif secara default dan resepPage tersembunyi
+    document.getElementById('homePage').style.display = 'flex';
+    document.getElementById('resepPage').style.display = 'none';
 
-    // Untuk memastikan halaman awal yang benar:
-    const homePage = document.getElementById('homePage');
-    const resepPage = document.getElementById('resepPage');
+    // Event listeners for search input (for real-time filtering or on enter)
+    document.getElementById('searchDesktopInput').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    });
+    document.getElementById('searchMobileInput').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    });
 
-    // Sembunyikan resepPage secara default jika homePage adalah yang pertama kali ditampilkan
-    if (homePage.style.display !== 'none' || !resepPage.style.display || resepPage.style.display === 'none') {
-        homePage.style.display = 'flex';
-        resepPage.style.display = 'none'; // Pastikan resepPage tersembunyi jika di awal homePage aktif
-    }
+    // Handle form submission for adding new recipe
+    const recipeForm = document.getElementById('recipeForm');
+    recipeForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // Mencegah halaman reload
+        simpanResep();
+    });
+
+    // Panggil loadData saat halaman 'resep' dimuat pertama kali melalui navigasi
+    // Ini menangani kasus di mana user mungkin langsung pergi ke halaman resep tanpa search
+    // atau untuk memastikan daftar ditampilkan setelah operasi CRUD.
+    // Catatan: Ini dipanggil di DOMContentLoaded jika resepPage adalah default.
+    // Namun, karena 'home' adalah default, loadData akan dipanggil saat showPage('resep') aktif.
+    // Jika Anda ingin menampilkan resep saat halaman 'resep' pertama kali diakses, pastikan
+    // showPage('resep') dipanggil saat tombol "Tambahkan Resep" diklik.
 });
