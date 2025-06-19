@@ -43,17 +43,19 @@
         font-size: 3rem;
         font-weight: 700;
         margin-bottom: 20px;
-        color: black; /* <--- UBAH DI SINI! */
+        color: black;
         text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
     #homePage p {
         font-size: 1.2rem;
         max-width: 600px;
-        color: black; /* <--- UBAH DI SINI! */
+        color: black;
         text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
     }
     #homePage img {
         filter: drop-shadow(0 0 10px rgba(0,0,0,0.7));
+        width: 200px; /* Default width for mobile */
+        height: auto;
     }
 
     /* CSS untuk sidebar (berlaku di semua ukuran layar secara default) */
@@ -119,11 +121,11 @@
       }
       /* Untuk desktop, kita juga bisa menyesuaikan alignment pada ul nav-pills */
       .sidebar .nav-pills {
-        display: flex; /* Pastikan ini flex untuk aligment item */
-        align-items: center; /* Memusatkan item nav secara vertikal */
-        height: 100%; /* Agar bisa mengisi tinggi yang tersedia */
-        flex-grow: 1; /* Allow nav-pills to grow and push search to right */
-        justify-content: flex-start; /* Align nav items to the start */
+        display: flex;
+        align-items: center;
+        height: 100%;
+        flex-grow: 1;
+        justify-content: flex-start;
       }
 
       .sidebar .container-fluid {
@@ -141,15 +143,15 @@
       }
 
       .sidebar #sidebarMenu {
-        display: flex !important; /* Change to flex to align menu items and search */
+        display: flex !important;
         width: auto !important;
-        justify-content: flex-end; /* Push menu items to the right */
+        justify-content: flex-end;
         align-items: center;
       }
 
       .sidebar .nav-pills {
         flex-direction: row !important;
-        margin-right: 1rem; /* Space between nav items and search bar */
+        margin-right: 1rem;
       }
 
       .sidebar .nav-item {
@@ -167,19 +169,24 @@
       }
       /* Ensure search form is displayed correctly on desktop */
       .sidebar .search-form {
-        margin-left: 0; /* Reset margin-left auto for desktop */
+        margin-left: 0;
+      }
+
+      /* New: Adjust logo size for desktop (Windows) */
+      #homePage img {
+        width: 300px; /* Ukuran yang lebih besar untuk desktop */
       }
     }
     /* Adjustments for smaller screens (mobile toggle menu) */
     @media (max-width: 767.98px) {
         .sidebar .search-form {
-            width: 100%; /* Full width for mobile search */
-            margin-top: 1rem; /* Space below menu items */
-            margin-left: 0; /* Remove auto margin for full width */
+            width: 100%;
+            margin-top: 1rem;
+            margin-left: 0;
         }
         .sidebar #sidebarMenu {
-            flex-direction: column; /* Stack menu items and search vertically */
-            align-items: flex-start; /* Align items to the left */
+            flex-direction: column;
+            align-items: flex-start;
         }
         .sidebar .nav-pills {
             width: 100%;
@@ -207,14 +214,16 @@
           <li class="nav-item mb-2">
             <a href="#" class="nav-link px-3" onclick="showPage('resep')">➕ Resep</a>
           </li>
-          <li class="nav-item mb-2 d-md-none"> <div class="search-form-mobile d-flex w-100">
-                  <input class="form-control me-2" type="search" placeholder="Cari Resep..." aria-label="Search">
-                  <button class="btn btn-outline-light" type="submit">Cari</button>
+          <li class="nav-item mb-2 d-md-none">
+              <div class="search-form-mobile d-flex w-100">
+                  <input class="form-control me-2" type="search" id="searchMobileInput" placeholder="Cari Resep..." aria-label="Search">
+                  <button class="btn btn-outline-light" type="button" onclick="performSearch()">Cari</button>
               </div>
           </li>
         </ul>
-        <form class="d-flex search-form d-none d-md-flex"> <input class="form-control me-2" type="search" placeholder="Cari Resep..." aria-label="Search">
-            <button class="btn btn-outline-light" type="submit">Cari</button>
+        <form class="d-flex search-form d-none d-md-flex" onsubmit="event.preventDefault(); performSearch();">
+            <input class="form-control me-2" type="search" id="searchDesktopInput" placeholder="Cari Resep..." aria-label="Search">
+            <button class="btn btn-outline-light" type="button" onclick="performSearch()">Cari</button>
         </form>
       </div>
     </div>
@@ -222,9 +231,9 @@
 
   <main class="content p-4">
     <div id="homePage">
-      <h1 class="text-center mb-4">Selamat Datang di Resep Makanan</h1>
+      <h1 class="text-center mb-4">Selamat Datang </h1>
       <img src="image/logo.png" alt="Logo" class="d-block mx-auto mb-3" style="width: 200px; height: auto;"/>
-      <p class="text-center">Temukan dan kelola resep makanan Anda dengan mudah.</p>
+      <p class="text-center">Temukan dan kelola RESEP makanan PENAK Anda </p>
     </div>
 
     <div id="resepPage" style="display: none;">
@@ -250,7 +259,7 @@
       </form>
 
       <div class="row" id="list">
-      </div>
+          </div>
     </div>
   </main>
 
@@ -261,11 +270,96 @@
       document.getElementById('homePage').style.display = (page === 'home') ? 'flex' : 'none';
       document.getElementById('resepPage').style.display = (page === 'resep') ? 'block' : 'none';
     }
+
     document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementById('homePage').style.display !== 'none' || !document.getElementById('resepPage').style.display || document.getElementById('resepPage').style.display === 'none') {
         document.getElementById('homePage').style.display = 'flex';
       }
+
+      // Add event listeners for search input (for real-time filtering or on enter)
+      document.getElementById('searchDesktopInput').addEventListener('keyup', function(event) {
+          if (event.key === 'Enter') {
+              performSearch();
+          }
+      });
+      document.getElementById('searchMobileInput').addEventListener('keyup', function(event) {
+          if (event.key === 'Enter') {
+              performSearch();
+          }
+      });
     });
+
+    // Dummy data untuk contoh pencarian. Di aplikasi nyata, ini bisa dari array resep Anda di script.js
+    // atau hasil fetch dari API.
+    const recipes = [
+        { title: "Resep Ayam Goreng", content: "Ayam, Minyak, Bumbu, Goreng hingga matang." },
+        { title: "Sop Buntut", content: "Buntut sapi, Sayuran, Bumbu sop, Rebus hingga empuk." },
+        { title: "Nasi Goreng Spesial", content: "Nasi, Telur, Kecap, Bawang, Goreng hingga harum." },
+        { title: "Gulai Kambing", content: "Daging kambing, Santan, Bumbu gulai, Masak hingga bumbu meresap." }
+    ];
+
+    // Fungsi untuk menampilkan semua resep (digunakan setelah search atau inisialisasi)
+    function displayRecipes(filteredRecipes) {
+        const listDiv = document.getElementById('list');
+        listDiv.innerHTML = ''; // Clear existing recipes
+
+        if (filteredRecipes.length === 0) {
+            listDiv.innerHTML = '<p class="text-center text-muted">Tidak ada resep yang ditemukan.</p>';
+            return;
+        }
+
+        filteredRecipes.forEach(recipe => {
+            const colDiv = document.createElement('div');
+            colDiv.className = 'col-md-4 mb-4 recipe-card'; // Add recipe-card class for easy targeting
+            colDiv.innerHTML = `
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title recipe-title">${recipe.title}</h5>
+                        <p class="card-text">${recipe.content}</p>
+                        </div>
+                </div>
+            `;
+            listDiv.appendChild(colDiv);
+        });
+    }
+
+    // Fungsi pencarian
+    function performSearch() {
+        // Tentukan input mana yang aktif
+        let searchTerm = '';
+        if (document.getElementById('searchDesktopInput').offsetParent !== null) { // Check if desktop input is visible
+            searchTerm = document.getElementById('searchDesktopInput').value.toLowerCase();
+        } else if (document.getElementById('searchMobileInput').offsetParent !== null) { // Check if mobile input is visible
+             searchTerm = document.getElementById('searchMobileInput').value.toLowerCase();
+        }
+
+
+        if (searchTerm === '') {
+            displayRecipes(recipes); // Show all recipes if search is empty
+            return;
+        }
+
+        const filteredRecipes = recipes.filter(recipe => {
+            // Search in title and content (you can expand this to include alat, bahan, langkah)
+            return recipe.title.toLowerCase().includes(searchTerm) ||
+                   recipe.content.toLowerCase().includes(searchTerm);
+        });
+
+        displayRecipes(filteredRecipes);
+        showPage('resep'); // Pindah ke halaman resep untuk menampilkan hasil
+    }
+
+    // Panggil displayRecipes saat halaman dimuat pertama kali untuk menampilkan semua resep
+    document.addEventListener('DOMContentLoaded', () => {
+        // ... (kode showPage dan event listener yang sudah ada) ...
+        displayRecipes(recipes); // Initial display of all recipes
+    });
+
+    function simpanResep() {
+      alert("Fungsi simpanResep akan diimplementasikan di script.js!");
+
+    }
+
   </script>
 </body>
 </html>
