@@ -19,6 +19,9 @@
       padding: 20px;
       border-radius: 10px;
     }
+    .resip-detail {
+      display: none;
+    }
     @media (min-width: 768px) {
       .sidebar {
         width: 250px;
@@ -89,7 +92,13 @@
         </div>
         <div class="mb-3">
           <label for="steps" class="form-label">Langkah-langkah</label>
-          <textarea class="form-control" id="steps" rows="4" placeholder="Masukkan langkah-langkah" required></textarea>
+          <div id="stepsContainer">
+            <div class="input-group mb-2">
+              <span class="input-group-text">1.</span>
+              <input type="text" class="form-control" placeholder="Masukkan langkah" onkeypress="tambahLangkah(event)">
+              <button type="button" class="btn btn-danger" onclick="hapusLangkah(this)">❌</button>
+            </div>
+          </div>
         </div>
         <button type="button" onclick="simpanResep()" class="btn btn-primary">Simpan</button>
       </form>
@@ -100,12 +109,89 @@
     </div>
   </main>
 
-  <script type="module" src="script.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
+    const resepList = [];
+
     function showPage(page) {
       document.getElementById('homePage').style.display = (page === 'home') ? 'block' : 'none';
       document.getElementById('resepPage').style.display = (page === 'resep') ? 'block' : 'none';
+    }
+
+    function simpanResep() {
+      const judul = document.getElementById('judul').value;
+      const alat = document.getElementById('alat').value;
+      const bahan = document.getElementById('bahan').value;
+      const stepsElements = document.querySelectorAll('#stepsContainer input');
+      const steps = Array.from(stepsElements).map(input => input.value).filter(value => value);
+
+      const resep = { judul, alat, bahan, steps };
+      resepList.push(resep);
+      document.getElementById('judul').value = '';
+      document.getElementById('alat').value = '';
+      document.getElementById('bahan').value = '';
+      document.getElementById('stepsContainer').innerHTML = '<div class="input-group mb-2"><span class="input-group-text">1.</span><input type="text" class="form-control" placeholder="Masukkan langkah" onkeypress="tambahLangkah(event)"><button type="button" class="btn btn-danger" onclick="hapusLangkah(this)">❌</button></div>';
+
+      tampilkanResep();
+    }
+
+    function tampilkanResep() {
+      const listDiv = document.getElementById('list');
+      listDiv.innerHTML = '';
+
+      resepList.forEach((resep, index) => {
+        const resepItem = document.createElement('div');
+        resepItem.className = 'col-md-4 mb-3';
+        resepItem.innerHTML = `
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title" onclick="tampilkanDetail(${index})">${resep.judul}</h5>
+              <div id="detail${index}" class="resip-detail">
+                <p><strong>Alat:</strong> ${resep.alat}</p>
+                <p><strong>Bahan:</strong> ${resep.bahan}</p>
+                <p><strong>Langkah-langkah:</strong></p>
+                <ol>
+                  ${resep.steps.map((step) => `<li>${step}</li>`).join('')}
+                </ol>
+              </div>
+            </div>
+          </div>
+        `;
+        listDiv.appendChild(resepItem);
+      });
+    }
+
+    function tampilkanDetail(index) {
+      const detailDiv = document.getElementById(`detail${index}`);
+      detailDiv.style.display = (detailDiv.style.display === 'none' || detailDiv.style.display === '') ? 'block' : 'none';
+    }
+
+    function tambahLangkah(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault(); // Mencegah form submit
+        const stepsContainer = document.getElementById('stepsContainer');
+        const stepCount = stepsContainer.children.length + 1;
+
+        const newStep = document.createElement('div');
+        newStep.className = 'input-group mb-2';
+        newStep.innerHTML = `<span class="input-group-text">${stepCount}.</span><input type="text" class="form-control" placeholder="Masukkan langkah" onkeypress="tambahLangkah(event)"><button type="button" class="btn btn-danger" onclick="hapusLangkah(this)">❌</button>`;
+        stepsContainer.appendChild(newStep);
+
+        // Fokus ke input baru
+        newStep.querySelector('input').focus();
+      }
+    }
+
+    function hapusLangkah(button) {
+      const stepsContainer = document.getElementById('stepsContainer');
+      const langkah = button.parentElement; // Ambil elemen langkah
+      stepsContainer.removeChild(langkah); // Hapus langkah
+
+      // Update nomor urut langkah
+      const steps = stepsContainer.querySelectorAll('.input-group');
+      steps.forEach((step, index) => {
+        step.querySelector('.input-group-text').textContent = index + 1 + '.'; // Menyusun ulang nomor urut
+      });
     }
   </script>
 </body>
