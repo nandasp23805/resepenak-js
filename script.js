@@ -5,6 +5,9 @@ const supabase = createClient(
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
 )
 
+// Global variable to keep track of the recipe being edited
+let currentEditRecipeId = null;
+
 async function simpanResep() {
     const judul = document.getElementById("judul").value;
     const alat = document.getElementById("alat").value;
@@ -17,25 +20,58 @@ async function simpanResep() {
         return;
     }
 
+    if (currentEditRecipeId) {
+        // Jika ada currentEditRecipeId, berarti ini adalah operasi UPDATE
+        await updateResep(currentEditRecipeId, judul, alat, bahan, steps);
+    } else {
+        // Jika tidak ada, ini adalah operasi INSERT (tambah baru)
+        const { data, error } = await supabase
+            .from('resepenak')
+            .insert([
+                { judul: judul, alat: alat, bahan: bahan, steps: steps }
+            ]);
+
+        if (error) {
+            console.error("Gagal menambahkan resep:", error.message);
+            return alert("Gagal menambahkan resep: " + error.message);
+        }
+        alert("Resep berhasil ditambahkan!");
+    }
+
+    // Reset form dan mode edit
+    resetForm();
+    loadData(); // Memuat ulang data setelah penambahan/pembaruan
+}
+
+// Fungsi baru untuk memperbarui resep
+async function updateResep(id, judul, alat, bahan, steps) {
     const { data, error } = await supabase
         .from('resepenak')
-        .insert([
-            { judul: judul, alat: alat, bahan: bahan, steps: steps }
-        ])
+        .update({ judul: judul, alat: alat, bahan: bahan, steps: steps })
+        .eq('id', id);
 
     if (error) {
-        console.error("Gagal menambahkan resep:", error.message);
-        return alert("Gagal menambahkan resep: " + error.message);
+        console.error("Gagal memperbarui resep:", error.message);
+        return alert("Gagal memperbarui resep: " + error.message);
     }
-    alert("Resep berhasil ditambahkan!");
-    // Kosongkan form setelah berhasil disimpan
+    alert("Resep berhasil diperbarui!");
+}
+
+// Fungsi untuk mereset formulir dan mengubah tombol kembali ke "Simpan"
+function resetForm() {
     document.getElementById("judul").value = "";
     document.getElementById("alat").value = "";
     document.getElementById("bahan").value = "";
     document.getElementById("steps").value = "";
-
-    loadData(); // Memuat ulang data setelah penambahan
+    document.getElementById("submitButton").textContent = "Simpan"; // Ganti teks tombol
+    currentEditRecipeId = null; // Reset ID resep yang diedit
+    // Sembunyikan tombol batal edit jika ada
+    const cancelButton = document.getElementById('cancelEditButton');
+    if (cancelButton) {
+        cancelButton.remove();
+    }
 }
+
 
 // Fungsi loadData diubah agar bisa menerima searchTerm
 async function loadData(searchTerm = '') { // Default searchTerm kosong
@@ -43,7 +79,6 @@ async function loadData(searchTerm = '') { // Default searchTerm kosong
 
     if (searchTerm) {
         // Menggunakan .ilike untuk pencarian case-insensitive pada beberapa kolom
-        // Anda bisa memilih kolom mana saja yang ingin dicari
         query = query.or(`judul.ilike.%${searchTerm}%,alat.ilike.%${searchTerm}%,bahan.ilike.%${searchTerm}%,steps.ilike.%${searchTerm}%`);
     }
 
@@ -70,7 +105,8 @@ async function loadData(searchTerm = '') { // Default searchTerm kosong
         const col = document.createElement("div");
         col.className = "col-md-4 mb-4"; // Tambahkan class Bootstrap untuk grid
         col.innerHTML = `
-            <div class="card bg-card border border-secondary shadow h-100"> <div class="card-body">
+            <div class="card bg-card border border-secondary shadow h-100">
+                <div class="card-body">
                     <h5 class="card-title">${item.judul}</h5>
                     <p class="card-text"><strong>Alat:</strong> ${item.alat || "-"}</p>
                     <p class="card-text"><strong>Bahan:</strong> ${item.bahan || "-"}</p>
@@ -100,31 +136,68 @@ async function confirmHapus(id) {
     loadData(); // Memuat ulang data setelah penghapusan
 }
 
-// Fungsi baru untuk melakukan pencarian
+// Fungsi untuk melakukan pencarian
 async function performSearch() {
     const searchDesktopInput = document.getElementById('searchDesktopInput');
     const searchMobileInput = document.getElementById('searchMobileInput');
 
     let searchTerm = '';
-    // Mendapatkan nilai dari input yang sedang terlihat/aktif
     if (searchDesktopInput && searchDesktopInput.offsetParent !== null) {
         searchTerm = searchDesktopInput.value.trim();
     } else if (searchMobileInput && searchMobileInput.offsetParent !== null) {
         searchTerm = searchMobileInput.value.trim();
     }
 
-    // Panggil loadData dengan searchTerm
+    // Panggil loadData dengan searchTerm. Ini akan menampilkan hasil pencarian.
     await loadData(searchTerm);
 
     // Pastikan halaman 'resep' ditampilkan setelah pencarian
     showPage('resep');
 }
 
-// Fungsi editResep (placeholder, perlu diimplementasikan lebih lanjut)
+// Fungsi editResep: Mengisi form dengan data resep yang akan diedit
 async function editResep(id) {
-    alert(`Fungsi edit untuk resep ID: ${id} akan datang!`);
-    // Anda akan mengambil data resep berdasarkan ID dari Supabase, mengisi formulir,
-    // dan memiliki fungsi simpan terpisah untuk memperbarui data
+    const { data, error } = await supabase
+        .from('resepenak')
+        .select('*')
+        .eq('id', id)
+        .single(); // Gunakan .single() karena kita hanya mencari satu resep berdasarkan ID
+
+    if (error) {
+        console.error("Gagal mengambil data resep untuk diedit:", error.message);
+        return alert("Gagal mengambil data resep untuk diedit: " + error.message);
+    }
+
+    // Isi formulir dengan data resep
+    document.getElementById("judul").value = data.judul;
+    document.getElementById("alat").value = data.alat;
+    document.getElementById("bahan").value = data.bahan;
+    document.getElementById("steps").value = data.steps;
+
+    // Simpan ID resep yang sedang diedit
+    currentEditRecipeId = id;
+
+    // Ubah teks tombol simpan menjadi "Perbarui"
+    document.getElementById("submitButton").textContent = "Perbarui";
+
+    // Tambahkan tombol "Batal Edit"
+    let cancelButton = document.getElementById('cancelEditButton');
+    if (!cancelButton) { // Jika belum ada, buat
+        cancelButton = document.createElement('button');
+        cancelButton.id = 'cancelEditButton';
+        cancelButton.className = 'btn btn-secondary ms-2'; // Bootstrap styling
+        cancelButton.textContent = 'Batal Edit';
+        cancelButton.type = 'button'; // Penting agar tidak submit form
+        cancelButton.onclick = function() {
+            resetForm();
+            loadData(); // Memuat ulang data penuh setelah batal
+        };
+        document.getElementById('submitButton').parentNode.appendChild(cancelButton);
+    }
+
+
+    // Pastikan halaman 'resep' ditampilkan agar form terlihat
+    showPage('resep');
 }
 
 
@@ -134,12 +207,22 @@ window.confirmHapus = confirmHapus;
 window.loadData = loadData; // Penting agar bisa dipanggil dari HTML atau DOMContentLoaded
 window.performSearch = performSearch; // expose performSearch
 window.editResep = editResep; // expose editResep
+window.resetForm = resetForm; // expose resetForm
 
 // Panggil loadData saat halaman pertama kali dimuat untuk menampilkan semua resep
 document.addEventListener('DOMContentLoaded', () => {
-    // Pastikan Anda memanggil loadData() hanya jika halaman resep adalah halaman default
-    // atau jika Anda berpindah ke halaman resep.
-    // Jika halaman 'home' adalah default, panggil loadData() saat showPage('resep') dipanggil.
-    // Untuk saat ini, kita panggil saat DOMContentLoaded agar resep langsung terlihat jika elemen list ada.
-    loadData();
+    // Kita tidak panggil loadData di sini jika halaman home adalah default.
+    // loadData akan dipanggil oleh showPage('resep') ketika user mengklik navigasi 'Tambahkan Resep'.
+    // Ini memastikan bahwa saat halaman pertama kali dimuat, hanya homePage yang terlihat
+    // dan resepPage (dengan daftar resepnya) dimuat saat user beralih ke sana.
+
+    // Untuk memastikan halaman awal yang benar:
+    const homePage = document.getElementById('homePage');
+    const resepPage = document.getElementById('resepPage');
+
+    // Sembunyikan resepPage secara default jika homePage adalah yang pertama kali ditampilkan
+    if (homePage.style.display !== 'none' || !resepPage.style.display || resepPage.style.display === 'none') {
+        homePage.style.display = 'flex';
+        resepPage.style.display = 'none'; // Pastikan resepPage tersembunyi jika di awal homePage aktif
+    }
 });
