@@ -1,6 +1,13 @@
 /* style.css */
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
+    position: relative; /* Menambahkan posisi relative */
     background-image: url('image/bg1.jpg');
     background-size: cover;
     background-position: center;
@@ -21,14 +28,14 @@ body {
 }
 
 .navbar.fixed-top {
-    background-color: MediumTurquoise;
-    padding: 1rem;
-    font-family: 'Montserrat', sans-serif;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1030;
+    z-index: 1030; /* Pastikan navbar di atas elemen lain */
+    background-color: MediumTurquoise;
+    padding: 1rem;
+    font-family: 'Montserrat', sans-serif;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -62,23 +69,28 @@ body {
 }
 
 .content-wrapper {
+    position: relative; /* Menambahkan posisi relative */
     padding-top: 80px;
     min-height: calc(100vh - 0px);
+    display: flex;
+    flex-direction: column;
 }
 
-#homePage {
+#homePage, #resepPage {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     color: #333;
-    min-height: calc(100vh - 80px);
+    padding: 20px;
+}
+
+#homePage {
     background-color: transparent;
     background-image: none;
     border-radius: 0;
-    padding: 20px;
-    overflow-y: hidden;
 }
 #homePage h1 {
     font-size: 3rem;
@@ -111,10 +123,31 @@ body {
 .footer {
     background-color: MediumTurquoise;
     color: white;
+    margin-top: auto;
 }
 
-/* Media query for desktop screens (min-width: 768px) */
 @media (min-width: 768px) {
+    body {
+        overflow-y: hidden;
+    }
+
+    .content-wrapper {
+        height: calc(100vh - 80px);
+        min-height: auto;
+        overflow-y: hidden;
+    }
+
+    #homePage, #resepPage {
+        overflow-y: hidden;
+        padding-bottom: 0;
+        padding-top: 0;
+    }
+
+    #resepPage form.bg-card {
+        max-height: 100%;
+        overflow-y: auto;
+    }
+
     .navbar.fixed-top .container-fluid {
         flex-direction: row !important;
         justify-content: space-between;
@@ -146,7 +179,6 @@ body {
         width: 300px;
     }
 
-    /* Collapse behavior for desktop */
     .collapse:not(.show) {
         display: block !important;
         height: auto !important;
@@ -160,8 +192,19 @@ body {
     }
 }
 
-/* Media query for smaller screens (max-width: 767.98px) */
 @media (max-width: 767.98px) {
+    body {
+        overflow-y: auto;
+    }
+    .content-wrapper {
+        min-height: calc(100vh - 0px);
+        height: auto;
+        overflow-y: auto;
+    }
+    #homePage, #resepPage {
+        overflow-y: auto;
+    }
+
     .navbar-collapse {
         background-color: MediumTurquoise;
         position: absolute;
@@ -184,7 +227,6 @@ body {
         margin-bottom: 5px;
     }
 
-    /* Mobile specific adjustments for cards */
     .bg-card {
         padding: 1rem;
     }
