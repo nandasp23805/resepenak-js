@@ -14,10 +14,10 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     margin-top: 0;
-    min-height: 100vh; /* Pastikan body minimal setinggi viewport */
-    display: flex; /* Jadikan body sebagai flex container */
-    flex-direction: column; /* Susun item secara kolom (navbar, content, footer) */
-    overflow-y: auto; /* Default: biarkan auto, nanti di desktop diatur lagi per halaman */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Biarkan body bisa discroll secara default */
 }
 
 .bg-card {
@@ -30,7 +30,7 @@ body {
 }
 
 .navbar.fixed-top {
-    position: fixed; /* Tetap fixed agar tidak discroll bersama konten */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -73,28 +73,26 @@ body {
 .content-wrapper {
     position: relative;
     padding-top: 80px; /* Jarak dari navbar fixed */
-    flex-grow: 1; /* Penting: agar mengambil sisa ruang vertikal yang tersedia */
+    flex-grow: 1; /* Pastikan mengambil sisa ruang vertikal yang tersedia */
     display: flex;
     flex-direction: column;
-    /* overflow-y akan diatur di media query atau per halaman */
 }
 
 #homePage, #resepPage, #daftarResepPage {
     flex-grow: 1; /* Pastikan halaman ini juga mengisi ruang vertikal di content-wrapper */
     display: flex; /* Untuk memposisikan konten di dalamnya */
     flex-direction: column;
-    justify-content: center; /* Memusatkan vertikal untuk home/resep */
-    align-items: center; /* Memusatkan horizontal untuk home/resep */
-    text-align: center; /* Untuk #homePage */
-    color: #333;
     padding: 20px;
-    /* overflow-y akan diatur per halaman di media query */
 }
 
 #homePage {
     background-color: transparent;
     background-image: none;
     border-radius: 0;
+    justify-content: center; /* Memusatkan vertikal untuk home */
+    align-items: center; /* Memusatkan horizontal untuk home */
+    text-align: center; /* Untuk #homePage */
+    color: #333;
 }
 #homePage h1 {
     font-size: 3rem;
@@ -116,64 +114,73 @@ body {
 }
 
 #resepPage {
-    padding: 20px;
+    justify-content: center; /* Memusatkan vertikal untuk resep */
+    align-items: center; /* Memusatkan horizontal untuk resep */
 }
 
 #daftarResepPage {
-    padding: 20px;
     justify-content: flex-start; /* Konten di daftar resep dimulai dari atas */
     align-items: flex-start; /* Konten di daftar resep dimulai dari kiri */
     text-align: left; /* Teks di daftar resep rata kiri */
 }
 
-/* --- Perbaikan untuk Footer --- */
+/* --- KONTROL VISIBILITAS FOOTER --- */
 .footer {
+    display: none; /* Sembunyikan footer secara default */
     background-color: MediumTurquoise;
     color: white;
-    padding: 1rem 0; /* Tambahkan padding agar ada ruang di atas/bawah teks footer */
+    padding: 1rem 0;
     text-align: center;
     width: 100%;
-    /* Tidak perlu margin-top: auto lagi karena body adalah flex container */
-    flex-shrink: 0; /* Penting: agar footer tidak menyusut jika ruang terbatas */
-    z-index: 1000; /* Pastikan footer di atas konten yang mungkin overflow */
+    flex-shrink: 0;
+    z-index: 1000;
 }
 
+/* Tampilkan footer HANYA jika body punya kelas 'home-page' */
+body.home-page .footer {
+    display: block;
+}
 
 @media (min-width: 768px) {
-    /* Di desktop, kita ingin scroll hanya pada content-wrapper saat Daftar Resep aktif */
-    body {
-        overflow-y: hidden; /* Sembunyikan scroll utama di body untuk desktop */
+    /* Di desktop, kontrol overflow dan tinggi content-wrapper */
+    body.home-page {
+        overflow-y: hidden; /* Home page tidak discroll */
+    }
+    body.home-page .content-wrapper {
+        /* Kurangi tinggi navbar (80px) dan tinggi footer (asumsi 50px) */
+        height: calc(100vh - 80px - 50px);
+        overflow-y: hidden;
     }
 
-    .content-wrapper {
-        /* Tinggi content-wrapper dihitung dari sisa ruang setelah navbar dan footer */
-        height: calc(100vh - 80px - 50px); /* 80px navbar, asumsi footer 50px */
-        min-height: auto;
-        /* overflow-y diatur per halaman di bawah */
+    body.resep-page {
+        overflow-y: hidden; /* Tambah Resep page tidak discroll */
     }
-
-    /* KONDISI SCROLL UNTUK CONTENT-WRAPPER BERDASARKAN HALAMAN */
-    body.home-page .content-wrapper,
     body.resep-page .content-wrapper {
-        overflow-y: hidden; /* Home & Tambah Resep: tidak ada scroll */
+        /* Hanya kurangi tinggi navbar (tidak ada footer di sini) */
+        height: calc(100vh - 80px);
+        overflow-y: hidden;
+    }
+
+    body.daftar-resep-page {
+        overflow-y: auto; /* Daftar Resep page bisa discroll (body yang scroll) */
     }
     body.daftar-resep-page .content-wrapper {
-        overflow-y: auto; /* Daftar Resep: bisa discroll */
+        min-height: calc(100vh - 80px); /* Konten minimal setinggi viewport setelah navbar */
+        height: auto; /* Biarkan tingginya otomatis mengikuti konten */
+        overflow-y: visible; /* Biarkan konten keluar dari wrapper untuk body scroll */
     }
 
-
-    /* Halaman Home dan Tambah Resep: tidak ada scroll */
+    /* Halaman Home dan Tambah Resep: tidak ada scroll di elemen page itu sendiri */
     #homePage, #resepPage {
         overflow-y: hidden;
         padding-bottom: 0;
         padding-top: 0;
     }
 
-    /* Daftar Resep Page: bisa discroll jika perlu */
+    /* Daftar Resep Page: tidak perlu overflow di sini, karena body yang scroll */
     #daftarResepPage {
-        overflow-y: auto; /* Aktifkan scroll untuk daftar resep di desktop */
-        height: 100%; /* Pastikan mengambil tinggi penuh untuk bisa discroll di dalam content-wrapper */
-        box-sizing: border-box;
+        overflow-y: visible; /* Biarkan kontennya mengalir normal */
+        height: auto; /* Biarkan tingginya otomatis */
     }
 
     #resepPage form.bg-card {
@@ -234,9 +241,15 @@ body {
         height: auto;
         overflow-y: auto;
     }
+    /* Di mobile, semua halaman bisa discroll */
     #homePage, #resepPage, #daftarResepPage {
-        overflow-y: auto; /* Halaman bisa scroll di mobile */
+        overflow-y: auto;
     }
+    /* Di mobile, footer harus selalu terlihat jika ada */
+    .footer {
+        display: block; /* Pastikan footer terlihat di mobile jika tidak disembunyikan oleh kelas page lain */
+    }
+
 
     .navbar-collapse {
         background-color: MediumTurquoise;

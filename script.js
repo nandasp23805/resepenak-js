@@ -187,35 +187,40 @@ async function editResep(id) {
 // --- Navigasi Halaman dan Inisialisasi ---
 
 function showPage(page) {
+    // Sembunyikan semua halaman
     document.getElementById('homePage').style.display = 'none';
     document.getElementById('resepPage').style.display = 'none';
     document.getElementById('daftarResepPage').style.display = 'none';
 
+    // Hapus semua kelas penanda halaman dari body
+    document.body.classList.remove('home-page', 'resep-page', 'daftar-resep-page');
+
+    // Tampilkan halaman yang diminta dan tambahkan kelas ke body
     if (page === 'home') {
         document.getElementById('homePage').style.display = 'flex';
+        document.body.classList.add('home-page');
     } else if (page === 'resep') {
         document.getElementById('resepPage').style.display = 'block';
+        document.body.classList.add('resep-page');
         resetForm();
     } else if (page === 'daftarResep') {
         document.getElementById('daftarResepPage').style.display = 'block';
+        document.body.classList.add('daftar-resep-page');
         loadDataResep();
     }
 
-    // --- BARIS BARU UNTUK MENUTUP NAVBAR DI MOBILE ---
-    // Pastikan navbar-collapse ada dan sedang terbuka
+    // Tutup navbar di mobile setelah navigasi
     const navbarCollapse = document.getElementById('navbarNav');
     if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-        // eslint-disable-next-line no-undef
         const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
         if (bsCollapse) {
-            bsCollapse.hide(); // Tutup navbar
+            bsCollapse.hide();
         }
     }
-    // --- AKHIR BARIS BARU ---
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    showPage('home');
+    showPage('home'); // Tampilkan halaman home saat pertama kali dimuat
 
     const recipeForm = document.getElementById('recipeForm');
     if (recipeForm) {
@@ -225,21 +230,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- BARIS BARU: Menambahkan event listener ke nav-link untuk menutup navbar ---
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            const navbarCollapse = document.getElementById('navbarNav');
-            if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-                // eslint-disable-next-line no-undef
-                const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-                if (bsCollapse) {
-                    bsCollapse.hide();
-                }
-            }
+            // Logika penutupan navbar sudah di showPage, ini hanya untuk memastikan klik link tetap memicu
         });
     });
-    // --- AKHIR BARIS BARU ---
 });
 
 // --- Memaparkan fungsi ke objek window agar bisa dipanggil dari HTML ---
