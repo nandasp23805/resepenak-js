@@ -1,195 +1,307 @@
+/* Styling Umum */
 body {
-  background-image: url('image/bg1.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  margin-top: 0;
-  min-height: 100vh;
-  overflow-y: auto;
-}
-.bg-card {
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 3rem;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
-  margin: 0 auto;
+    background-image: url('image/bg1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0; /* Pastikan margin body 0 */
+    min-height: 100vh;
+    overflow-y: auto; /* Izinkan scrolling pada body jika konten melebihi viewport */
+    display: flex; /* Menggunakan flexbox untuk layout utama */
+    flex-direction: column; /* Konten utama akan menumpuk secara vertikal */
 }
 
-/* CSS untuk navbar (sekarang fixed-top) */
+/* Base bg-card for general use (e.g., forms) */
+.bg-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 3rem;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-width: 600px; /* Default max-width for forms */
+    margin: 0 auto;
+}
+
+/* CSS untuk navbar (fixed-top) */
 .navbar.fixed-top {
-  background-color: MediumTurquoise;
-  padding: 1rem;
-  font-family: 'Montserrat', sans-serif;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1030;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    background-color: MediumTurquoise;
+    padding: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* Adjustments for the brand and toggler within the fixed navbar */
 .navbar-brand {
-  color: #333;
-  margin-bottom: 0 !important;
-  display: flex;
-  align-items: center;
+    color: #333;
+    margin-bottom: 0 !important;
+    display: flex;
+    align-items: center;
 }
 .navbar-brand img {
-  width: 45px;
-  height: 45px;
-  margin-right: 0.5rem;
+    width: 45px;
+    height: 45px;
+    margin-right: 0.5rem;
 }
 .navbar-brand span {
-  font-weight: 700;
-  color: #333;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-  font-size: 1.25rem;
+    font-weight: 700;
+    color: #333;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    font-size: 1.25rem;
 }
 
-/* CSS untuk link di navbar (sebelumnya sidebar) */
+/* CSS untuk link di navbar */
 .navbar-nav .nav-link {
-  color: white;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  padding: 0.8rem 1rem;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 0.8rem 1rem;
 }
 .navbar-nav .nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
 }
 
-/* Wrapper untuk konten utama di bawah navbar yang tetap */
+/* Wrapper untuk konten utama di bawah navbar */
 .content-wrapper {
-  padding-top: 80px;
-  min-height: calc(100vh - 0px);
+    padding-top: 80px; /* Ruang untuk navbar fixed-top */
+    flex-grow: 1; /* Memastikan content-wrapper mengisi sisa ruang vertikal */
+    display: flex; /* Untuk layout flexbox di dalamnya */
+    flex-direction: column; /* Konten di dalamnya akan menumpuk secara vertikal */
+    width: 100%; /* Pastikan lebar penuh */
 }
 
+/* main content area */
+main.content {
+    flex-grow: 1; /* Pastikan main content mengisi ruang yang tersedia */
+    padding-bottom: 2rem !important; /* Beri ruang di bawah main content sebelum footer */
+}
+
+/* CSS untuk Footer */
+.footer {
+    background-color: MediumTurquoise;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+    width: 100%;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    font-family: 'Montserrat', sans-serif;
+    z-index: 1029;
+    /* Tidak perlu position: relative/bottom karena body sudah flex container */
+}
+
+.footer a {
+    color: white;
+    text-decoration: underline;
+}
+
+.footer a:hover {
+    color: #f8f9fa;
+}
+
+/* Halaman Home */
 #homePage {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: #333;
-  min-height: calc(100vh - 80px);
-  background-color: transparent;
-  background-image: none;
-  border-radius: 0;
-  padding: 20px;
-  overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #333;
+    /* Sesuaikan min-height agar center di viewport setelah navbar */
+    min-height: calc(100vh - 80px - 70px); /* 80px navbar, sekitar 70px footer */
+    background-color: transparent;
+    background-image: none;
+    border-radius: 0;
+    padding: 20px;
+    overflow: hidden; /* Hindari scroll di sini */
 }
 #homePage h1 {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 20px;
-  color: black;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: black;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 #homePage p {
-  font-size: 1.2rem;
-  max-width: 600px;
-  color: black;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    font-size: 1.2rem;
+    max-width: 600px;
+    color: black;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
 #homePage img {
-  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.7));
-  width: 200px;
-  height: auto;
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.7));
+    width: 200px;
+    height: auto;
 }
 
+/* Halaman Tambah Resep (resepPage) */
 #resepPage {
-  padding: 20px;
-  overflow-y: hidden;
+    padding: 20px;
+    /* Pastikan form di dalamnya tidak melebihi lebar kontainer utama */
+    max-width: 700px; /* Batasi lebar form */
+    margin: 20px auto; /* Pusatkan form */
+    overflow: hidden;
 }
 
+/* Halaman Daftar Resep (daftarResepPage) */
 #daftarResepPage {
-  padding: 20px;
+    padding: 20px;
+    flex-grow: 1; /* Memastikan daftar resep mengisi sisa ruang */
 }
+
+/* Kolom Kiri: Daftar Judul Resep */
+#daftarResepList {
+    max-height: calc(100vh - 200px); /* Tinggi maksimum untuk daftar agar bisa di-scroll */
+    overflow-y: auto; /* Aktifkan scroll jika konten melebihi tinggi */
+    border-right: 1px solid rgba(0,0,0,0.1); /* Garis pemisah visual */
+    padding-right: 15px; /* Ruang antara daftar dan garis */
+    border-radius: 8px; /* Sudut membulat */
+}
+
+#daftarResepList .list-group-item {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    margin-bottom: 8px; /* Spasi antar item */
+    border-radius: 8px;
+    font-weight: bold;
+    color: #34495e; /* Warna teks judul */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    padding: 12px 15px; /* Padding di dalam item */
+    cursor: pointer; /* Menunjukkan bahwa item bisa diklik */
+}
+
+#daftarResepList .list-group-item:hover {
+    background-color: #ecf0f1; /* Warna hover */
+    transform: translateX(5px); /* Sedikit efek geser saat hover */
+}
+
+#daftarResepList .list-group-item.active {
+    background-color: MediumTurquoise; /* Warna saat aktif/terpilih */
+    border-color: MediumTurquoise;
+    color: white;
+}
+
+/* Kolom Kanan: Detail Resep yang Dipilih */
+.recipe-detail-card { /* Menggunakan kelas untuk ini */
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 2rem; /* Sesuaikan padding agar tidak terlalu besar */
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 250px; /* Minimal tinggi agar terlihat */
+    opacity: 0; /* Mulai tersembunyi secara default */
+    transform: translateX(-50px); /* Mulai sedikit ke kiri */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Transisi untuk animasi */
+}
+
+/* Kelas animasi */
+.recipe-detail-card.fade-in-slide {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Pesan "Pilih resep" */
+#noRecipeSelected, #noRecipesFound {
+    padding-top: 50px; /* Ruang dari atas */
+    background-color: rgba(255, 255, 255, 0.9); /* Beri background agar terlihat di atas gambar fixed */
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-height: 250px; /* Samakan min-height dengan detail card */
+    display: flex; /* Untuk centering konten */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#noRecipeSelected img, #noRecipesFound img {
+    max-width: 150px;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+}
+#noRecipeSelected p, #noRecipesFound p {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    color: #555;
+}
+
 
 /* Media query untuk ukuran layar desktop (min-width: 768px) */
 @media (min-width: 768px) {
-  .navbar.fixed-top .container-fluid {
-    flex-direction: row !important;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .navbar.fixed-top .container-fluid {
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-  .navbar.fixed-top #navbarNav {
-    display: flex !important;
-    width: auto !important;
-    justify-content: flex-end;
-    align-items: center;
-  }
+    .navbar.fixed-top #navbarNav {
+        display: flex !important;
+        width: auto !important;
+        justify-content: flex-end;
+        align-items: center;
+    }
 
-  .navbar-nav {
-    flex-direction: row !important;
-    margin-right: 1rem;
-  }
+    .navbar-nav {
+        flex-direction: row !important;
+        margin-right: 1rem;
+    }
 
-  .navbar-nav .nav-item {
-    margin-bottom: 0 !important;
-    margin-right: 15px;
-  }
+    .navbar-nav .nav-item {
+        margin-bottom: 0 !important;
+        margin-right: 15px;
+    }
 
-  .navbar-nav .nav-item:last-child {
-    margin-right: 0;
-  }
+    .navbar-nav .nav-item:last-child {
+        margin-right: 0;
+    }
 
-  /* Logo di Home page ukuran lebih besar untuk desktop */
-  #homePage img {
-    width: 300px;
-  }
+    /* Logo di Home page ukuran lebih besar untuk desktop */
+    #homePage img {
+        width: 300px;
+    }
 }
 
 /* Adjustments for smaller screens (mobile toggle menu) */
 @media (max-width: 767.98px) {
-  .navbar-collapse {
-    background-color: MediumTurquoise;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    padding-bottom: 10px;
-    z-index: 1020;
-  }
-  .navbar-nav {
-    flex-direction: column !important;
-    align-items: flex-start;
-    width: 100%;
-    padding: 0 15px;
-  }
-  .navbar-nav .nav-item {
-    width: 100%;
-    margin-bottom: 5px;
-  }
-}
+    .navbar-collapse {
+        background-color: MediumTurquoise;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-bottom: 10px;
+        z-index: 1020;
+    }
+    .navbar-nav {
+        flex-direction: column !important;
+        align-items: flex-start;
+        width: 100%;
+        padding: 0 15px;
+    }
+    .navbar-nav .nav-item {
+        width: 100%;
+        margin-bottom: 5px;
+    }
 
-/* --- */
-/* CSS untuk Footer (Sidebar Bawah) */
-.footer {
-  background-color: MediumTurquoise; /* Warna yang sama dengan navbar */
-  color: white; /* Warna teks putih */
-  padding: 1rem 0; /* Padding atas dan bawah */
-  text-align: center; /* Teks di tengah */
-  position: relative; /* Agar bisa berada di bawah konten */
-  bottom: 0; /* Menempel di bagian bawah */
-  width: 100%; /* Lebar penuh */
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Bayangan di atas footer */
-  font-family: 'Montserrat', sans-serif;
-  z-index: 1029; /* Sedikit di bawah navbar */
-}
+    /* Pada layar kecil, kolom akan menumpuk */
+    #daftarResepList {
+        max-height: 40vh; /* Lebih pendek di mobile agar detail bisa terlihat */
+        border-right: none; /* Hilangkan garis vertikal */
+        border-bottom: 1px solid rgba(0,0,0,0.1); /* Tambah garis bawah */
+        padding-right: 0;
+        margin-bottom: 15px; /* Ruang antara daftar dan detail */
+    }
+    #detailResepCard, #noRecipeSelected, #noRecipesFound {
+        margin-top: 15px; /* Tambah ruang di atas detail/pesan */
+    }
 
-.footer a {
-  color: white;
-  text-decoration: underline; /* Agar link terlihat */
+    /* Memastikan navbar tertutup saat link diklik */
+    .navbar-nav .nav-link {
+        width: 100%; /* Memastikan link mengisi lebar penuh */
+        text-align: center;
+        padding: 0.75rem 1rem; /* Padding lebih besar untuk memudahkan sentuhan */
+    }
 }
-
-.footer a:hover {
-  color: #f8f9fa; /* Warna sedikit terang saat hover */
-}
-
