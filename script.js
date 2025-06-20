@@ -120,6 +120,14 @@ async function loadDataResep() {
         `;
         container.appendChild(col);
     });
+
+    // Inisialisasi ulang komponen Bootstrap setelah DOM diperbarui
+    // Ini penting agar Bootstrap Collapse bekerja dengan benar pada elemen yang baru ditambahkan
+    const collapseElements = container.querySelectorAll('.collapse');
+    collapseElements.forEach(collapseEl => {
+        // eslint-disable-next-line no-undef
+        new bootstrap.Collapse(collapseEl, { toggle: false });
+    });
 }
 
 async function confirmHapus(id) {
@@ -205,8 +213,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Memaparkan fungsi ke objek window agar bisa dipanggil dari HTML ---
 window.simpanResep = simpanResep;
-window.confirmHapus = confirmHapus; // Ini yang ditambahkan/diperbaiki
+window.confirmHapus = confirmHapus;
 window.loadDataResep = loadDataResep;
-window.editResep = editResep;     // Ini yang ditambahkan/diperbaiki
+window.editResep = editResep;
 window.resetForm = resetForm;
 window.showPage = showPage;
