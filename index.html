@@ -91,23 +91,6 @@
       text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     }
 
-    /* New: Styling for the search form */
-    .sidebar .search-form {
-        display: flex;
-        align-items: center;
-        margin-left: auto; /* Push search form to the right */
-    }
-
-    .sidebar .search-form .form-control {
-        border-radius: 5px;
-        border: none;
-        padding: 0.5rem 1rem;
-        margin-right: 0.5rem;
-    }
-    .sidebar .search-form .btn {
-        border-radius: 5px;
-    }
-
     /* Media query untuk ukuran layar desktop (min-width: 768px) */
     @media (min-width: 768px) {
       .sidebar {
@@ -167,10 +150,6 @@
         margin-left: 0;
         padding-top: 2rem;
       }
-      /* Ensure search form is displayed correctly on desktop */
-      .sidebar .search-form {
-        margin-left: 0;
-      }
 
       /* New: Adjust logo size for desktop (Windows) */
       #homePage img {
@@ -179,11 +158,6 @@
     }
     /* Adjustments for smaller screens (mobile toggle menu) */
     @media (max-width: 767.98px) {
-        .sidebar .search-form {
-            width: 100%;
-            margin-top: 1rem;
-            margin-left: 0;
-        }
         .sidebar #sidebarMenu {
             flex-direction: column;
             align-items: flex-start;
@@ -214,17 +188,10 @@
           <li class="nav-item mb-2">
             <a href="#" class="nav-link px-3" onclick="showPage('resep')">Tambahkan Resep</a>
           </li>
-          <li class="nav-item mb-2 d-md-none">
-              <div class="search-form-mobile d-flex w-100">
-                  <input class="form-control me-2" type="search" id="searchMobileInput" placeholder="Cari Resep..." aria-label="Search">
-                  <button class="btn btn-outline-light" type="button" onclick="performSearch()">Cari</button>
-              </div>
+          <li class="nav-item mb-2">
+            <a href="#" class="nav-link px-3" onclick="showPage('daftarResep')">Daftar Resep</a>
           </li>
         </ul>
-        <form class="d-flex search-form d-none d-md-flex" onsubmit="event.preventDefault(); performSearch();">
-            <input class="form-control me-2" type="search" id="searchDesktopInput" placeholder="Cari Resep..." aria-label="Search">
-            <button class="btn btn-outline-light" type="button" onclick="performSearch()">Cari</button>
-        </form>
       </div>
     </div>
   </nav>
@@ -236,7 +203,7 @@
       <p class="text-center">Temukan dan kelola RESEP makanan PENAK Anda </p>
     </div>
 
-    <div id="resepPage">
+    <div id="resepPage" style="display:none;">
       <h2 class="text-center mb-3">Tambah Resep</h2>
       <form class="bg-card p-4 rounded shadow mb-5" id="recipeForm">
         <div class="mb-3">
@@ -255,11 +222,14 @@
           <label for="steps" class="form-label">Langkah-langkah</label>
           <textarea class="form-control" id="steps" rows="4" placeholder="Masukkan langkah-langkah" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Simpan</button>
+        <button type="submit" class="btn btn-primary" id="submitButton">Simpan</button>
       </form>
+    </div>
 
-      <div class="row" id="list">
-          </div>
+    <div id="daftarResepPage" style="display:none;">
+      <h2 class="text-center mb-3">Daftar Resep</h2>
+      <div class="row" id="daftarResepList">
+                </div>
     </div>
   </main>
 
@@ -268,43 +238,32 @@
   <script>
     // Fungsi showPage tetap di sini karena mengelola tampilan halaman
     function showPage(page) {
-      document.getElementById('homePage').style.display = (page === 'home') ? 'flex' : 'none';
-      document.getElementById('resepPage').style.display = (page === 'resep') ? 'block' : 'none';
-      // Memanggil loadData() setiap kali beralih ke halaman resep
-      // Ini memastikan daftar resep selalu diperbarui (termasuk setelah pencarian)
-      if (page === 'resep') {
-        loadData(); // Memuat data tanpa filter, akan menampilkan semua resep
+      document.getElementById('homePage').style.display = 'none';
+      document.getElementById('resepPage').style.display = 'none';
+      document.getElementById('daftarResepPage').style.display = 'none';
+
+      if (page === 'home') {
+        document.getElementById('homePage').style.display = 'flex';
+      } else if (page === 'resep') {
+        document.getElementById('resepPage').style.display = 'block';
+        resetForm(); // Pastikan form bersih saat beralih ke 'Tambah Resep'
+      } else if (page === 'daftarResep') {
+        document.getElementById('daftarResepPage').style.display = 'block';
+        loadDataResep(); // Memuat data resep saat halaman 'Daftar Resep' ditampilkan
       }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       // Menentukan halaman awal yang ditampilkan
-      if (document.getElementById('homePage').style.display !== 'none' || !document.getElementById('resepPage').style.display || document.getElementById('resepPage').style.display === 'none') {
-        document.getElementById('homePage').style.display = 'flex';
-      }
-
-      // Add event listeners for search input (for real-time filtering or on enter)
-      // Pastikan fungsi performSearch() sudah terekspos secara global dari script.js
-      document.getElementById('searchDesktopInput').addEventListener('keyup', function(event) {
-          if (event.key === 'Enter') {
-              performSearch();
-          }
-      });
-      document.getElementById('searchMobileInput').addEventListener('keyup', function(event) {
-          if (event.key === 'Enter') {
-              performSearch();
-          }
-      });
-
+      showPage('home');
+      
       // Handle form submission for adding new recipe
       const recipeForm = document.getElementById('recipeForm');
       recipeForm.addEventListener('submit', function(event) {
           event.preventDefault(); // Mencegah halaman reload
           simpanResep(); // simpanResep sudah ada di script.js
       });
-
     });
-
   </script>
 </body>
 </html>
