@@ -7,6 +7,7 @@ html, body {
 }
 
 body {
+    position: relative;
     background-image: url('image/bg1.jpg');
     background-size: cover;
     background-position: center;
@@ -14,7 +15,7 @@ body {
     background-attachment: fixed;
     margin-top: 0;
     min-height: 100vh;
-    overflow-y: auto;
+    overflow-y: auto; /* Default: biarkan auto */
 }
 
 .bg-card {
@@ -27,14 +28,14 @@ body {
 }
 
 .navbar.fixed-top {
-    background-color: MediumTurquoise;
-    padding: 1rem;
-    font-family: 'Montserrat', sans-serif;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1030;
+    background-color: MediumTurquoise;
+    padding: 1rem;
+    font-family: 'Montserrat', sans-serif;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -68,10 +69,12 @@ body {
 }
 
 .content-wrapper {
+    position: relative;
     padding-top: 80px;
     min-height: calc(100vh - 0px);
     display: flex;
     flex-direction: column;
+    /* overflow-y: hidden; (Ini akan dipindahkan ke desktop media query dan hanya untuk home/resep) */
 }
 
 #homePage, #resepPage {
@@ -83,6 +86,7 @@ body {
     text-align: center;
     color: #333;
     padding: 20px;
+    /* overflow-y: hidden; (Ini akan dipindahkan ke desktop media query) */
 }
 
 #homePage {
@@ -111,11 +115,13 @@ body {
 
 #resepPage {
     padding: 20px;
-    overflow-y: hidden;
+    /* overflow-y: hidden; (Ini akan dipindahkan ke desktop media query) */
 }
 
 #daftarResepPage {
     padding: 20px;
+    flex-grow: 1; /* Penting: agar mengambil tinggi penuh di content-wrapper */
+    /* overflow-y: auto; (Ini akan dipindahkan ke desktop media query) */
 }
 
 .footer {
@@ -125,20 +131,40 @@ body {
 }
 
 @media (min-width: 768px) {
+    /* BODY HANYA HIDDEN SAAT HOME/RESEP YANG AKTIF */
     body {
-        overflow-y: hidden;
+        /* overflow-y: hidden; (Hapus ini dari sini) */
     }
 
     .content-wrapper {
         height: calc(100vh - 80px);
         min-height: auto;
-        overflow-y: hidden;
+        /* overflow-y: hidden; (Hapus ini dari sini) */
     }
 
+    /* KONDISIONAL SCROLL UNTUK CONTENT-WRAPPER */
+    /* Ini akan memastikan content-wrapper bisa discroll hanya jika daftar resep aktif */
+    body.home-page .content-wrapper,
+    body.resep-page .content-wrapper {
+        overflow-y: hidden;
+    }
+    body.daftar-resep-page .content-wrapper {
+        overflow-y: auto;
+    }
+
+
+    /* Halaman Home dan Tambah Resep: tidak ada scroll */
     #homePage, #resepPage {
         overflow-y: hidden;
         padding-bottom: 0;
         padding-top: 0;
+    }
+
+    /* Daftar Resep Page: bisa discroll jika perlu */
+    #daftarResepPage {
+        overflow-y: auto; /* Aktifkan scroll untuk daftar resep di desktop */
+        height: 100%; /* Pastikan mengambil tinggi penuh untuk bisa discroll */
+        box-sizing: border-box; /* Pastikan padding tidak membuat overflow */
     }
 
     #resepPage form.bg-card {
@@ -199,7 +225,7 @@ body {
         height: auto;
         overflow-y: auto;
     }
-    #homePage, #resepPage {
+    #homePage, #resepPage, #daftarResepPage { /* Tambahkan daftarResepPage di mobile agar bisa discroll */
         overflow-y: auto;
     }
 
