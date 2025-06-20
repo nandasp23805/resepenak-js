@@ -205,8 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Memaparkan fungsi ke objek window agar bisa dipanggil dari HTML ---
 window.simpanResep = simpanResep;
-window.confirmHapus = confirmHapus;
+window.confirmHapus = confirmHapus; // Ini yang ditambahkan/diperbaiki
 window.loadDataResep = loadDataResep;
-window.editResep = editResep;
+window.editResep = editResep;     // Ini yang ditambahkan/diperbaiki
 window.resetForm = resetForm;
 window.showPage = showPage;
