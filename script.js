@@ -2,7 +2,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const supabase = createClient(
     "https://pcqrwkvardtgkurjugra.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivGnoxrzt3k9Uo"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
 );
 
 let currentEditRecipeId = null;
@@ -35,8 +35,8 @@ async function simpanResep() {
     }
 
     resetForm();
-    loadDataResep(); // Pastikan data dimuat ulang setelah simpan/update
-    showPage('daftarResep'); // Kembali ke halaman daftar resep
+    loadDataResep();
+    showPage('daftarResep');
 }
 
 async function updateResep(id, judul, alat, bahan, steps) {
@@ -75,11 +75,11 @@ async function loadDataResep() {
     }
 
     const container = document.getElementById("daftarResepList");
-    container.innerHTML = ""; // Kosongkan daftar sebelumnya
+    container.innerHTML = "";
 
     if (data.length === 0) {
         container.innerHTML = `
-            <div class="col-12 text-center py-5">
+            <div class="col-12 text-center">
                 <img src="image/404.jpg" alt="No Recipes" class="img-fluid mb-3" style="max-width: 250px;">
                 <p class="text-muted">Tidak ada resep yang ditemukan.</p>
             </div>
@@ -89,7 +89,7 @@ async function loadDataResep() {
 
     data.forEach((item) => {
         const col = document.createElement("div");
-        col.className = "col-md-6 col-lg-4 mb-4"; // Gunakan grid Bootstrap
+        col.className = "col-md-6 col-lg-4 mb-4";
         col.innerHTML = `
             <div class="card bg-card border border-secondary shadow h-100">
                 <div class="card-body">
@@ -102,7 +102,7 @@ async function loadDataResep() {
                         ${item.judul}
                     </h5>
                     <div class="collapse" id="collapseRecipe${item.id}">
-                        <div class="card card-body mt-3 bg-light">
+                        <div class="card card-body mt-3">
                             <h6>Alat:</h6>
                             <p>${item.alat || "-"}</p>
                             <h6>Bahan:</h6>
@@ -133,7 +133,7 @@ async function confirmHapus(id) {
         return alert("Gagal menghapus resep: " + error.message);
     }
     alert("Resep berhasil dihapus!");
-    loadDataResep(); // Muat ulang daftar setelah hapus
+    loadDataResep();
 }
 
 async function editResep(id) {
@@ -165,12 +165,12 @@ async function editResep(id) {
         cancelButton.type = 'button';
         cancelButton.onclick = function() {
             resetForm();
-            showPage('daftarResep'); // Kembali ke daftar resep setelah batal edit
+            loadDataResep();
+            showPage('daftarResep');
         };
-        // Menambahkan tombol batal di samping tombol simpan
         document.getElementById('submitButton').parentNode.appendChild(cancelButton);
     }
-    showPage('resep'); // Pindah ke halaman tambah resep untuk edit
+    showPage('resep');
 }
 
 // --- Navigasi Halaman dan Inisialisasi ---
@@ -180,41 +180,33 @@ function showPage(page) {
     document.getElementById('resepPage').style.display = 'none';
     document.getElementById('daftarResepPage').style.display = 'none';
 
-    // Tutup navbar di HP jika sedang terbuka
-    const navbarCollapse = document.getElementById('navbarNav');
-    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
-    if (navbarCollapse.classList.contains('show')) {
-        bsCollapse.hide();
-    }
-
     if (page === 'home') {
         document.getElementById('homePage').style.display = 'flex';
     } else if (page === 'resep') {
         document.getElementById('resepPage').style.display = 'block';
-        resetForm(); // Reset form saat masuk halaman tambah resep
+        resetForm();
     } else if (page === 'daftarResep') {
         document.getElementById('daftarResepPage').style.display = 'block';
-        loadDataResep(); // Muat data saat masuk halaman daftar resep
+        loadDataResep();
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Tampilkan halaman home saat pertama kali dimuat
-    showPage('home'); 
+    showPage('home');
 
     const recipeForm = document.getElementById('recipeForm');
     if (recipeForm) {
         recipeForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah reload halaman
+            event.preventDefault();
             simpanResep();
         });
     }
-
-    // Memaparkan fungsi ke objek window agar bisa dipanggil dari HTML
-    window.simpanResep = simpanResep;
-    window.confirmHapus = confirmHapus;
-    window.loadDataResep = loadDataResep;
-    window.editResep = editResep;
-    window.resetForm = resetForm;
-    window.showPage = showPage;
 });
+
+// --- Memaparkan fungsi ke objek window agar bisa dipanggil dari HTML ---
+window.simpanResep = simpanResep;
+window.confirmHapus = confirmHapus;
+window.loadDataResep = loadDataResep;
+window.editResep = editResep;
+window.resetForm = resetForm;
+window.showPage = showPage;
