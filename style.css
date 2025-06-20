@@ -168,3 +168,27 @@ body {
     margin-bottom: 5px;
   }
 }
+
+/* --- */
+/* CSS untuk Footer (Sidebar Bawah) */
+.footer {
+  background-color: MediumTurquoise; /* Warna yang sama dengan navbar */
+  color: white; /* Warna teks putih */
+  padding: 1rem 0; /* Padding atas dan bawah */
+  text-align: center; /* Teks di tengah */
+  position: relative; /* Agar bisa berada di bawah konten */
+  bottom: 0; /* Menempel di bagian bawah */
+  width: 100%; /* Lebar penuh */
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.1); /* Bayangan di atas footer */
+  font-family: 'Montserrat', sans-serif;
+  z-index: 1029; /* Sedikit di bawah navbar */
+}
+
+.footer a {
+  color: white;
+  text-decoration: underline; /* Agar link terlihat */
+}
+
+.footer a:hover {
+  color: #f8f9fa; /* Warna sedikit terang saat hover */
+}

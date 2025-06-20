@@ -36,7 +36,7 @@ async function simpanResep() {
 
     resetForm();
     loadDataResep();
-    showPage('daftarResep'); // Panggil showPage dari lingkup modul ini
+    showPage('daftarResep');
 }
 
 async function updateResep(id, judul, alat, bahan, steps) {
@@ -93,13 +93,27 @@ async function loadDataResep() {
         col.innerHTML = `
             <div class="card bg-card border border-secondary shadow h-100">
                 <div class="card-body">
-                    <h5 class="card-title">${item.judul}</h5>
-                    <p class="card-text"><strong>Alat:</strong> ${item.alat || "-"}</p>
-                    <p class="card-text"><strong>Bahan:</strong> ${item.bahan || "-"}</p>
-                    <p class="card-text"><strong>Langkah:</strong> ${item.steps || "-"}</p>
-                    <div class="d-flex justify-content-end mt-3">
-                        <button class="btn btn-warning btn-sm me-2" onclick="editResep(${item.id})">Edit</button>
-                        <button class="btn btn-outline-danger btn-sm" onclick="confirmHapus(${item.id})">Hapus</button>
+                    <h5 class="card-title"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseRecipe${item.id}"
+                        aria-expanded="false"
+                        aria-controls="collapseRecipe${item.id}"
+                        style="cursor: pointer;">
+                        ${item.judul}
+                    </h5>
+                    <div class="collapse" id="collapseRecipe${item.id}">
+                        <div class="card card-body mt-3">
+                            <h6>Alat:</h6>
+                            <p>${item.alat || "-"}</p>
+                            <h6>Bahan:</h6>
+                            <p>${item.bahan || "-"}</p>
+                            <h6>Langkah:</h6>
+                            <p>${item.steps || "-"}</p>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button class="btn btn-warning btn-sm me-2" onclick="editResep(${item.id})">Edit</button>
+                                <button class="btn btn-outline-danger btn-sm" onclick="confirmHapus(${item.id})">Hapus</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -161,7 +175,6 @@ async function editResep(id) {
 
 // --- Navigasi Halaman dan Inisialisasi ---
 
-// Fungsi showPage harus didefinisikan di sini (script.js) untuk diakses oleh HTML onclick
 function showPage(page) {
     document.getElementById('homePage').style.display = 'none';
     document.getElementById('resepPage').style.display = 'none';
@@ -171,32 +184,29 @@ function showPage(page) {
         document.getElementById('homePage').style.display = 'flex';
     } else if (page === 'resep') {
         document.getElementById('resepPage').style.display = 'block';
-        resetForm(); // Panggil resetForm dari lingkup modul ini
+        resetForm();
     } else if (page === 'daftarResep') {
         document.getElementById('daftarResepPage').style.display = 'block';
-        loadDataResep(); // Panggil loadDataResep dari lingkup modul ini
+        loadDataResep();
     }
 }
 
-// Event listener untuk pengiriman formulir dan inisialisasi halaman awal
 document.addEventListener('DOMContentLoaded', () => {
-    // Tampilkan halaman home secara eksplisit saat pertama kali dimuat
     showPage('home');
 
     const recipeForm = document.getElementById('recipeForm');
-    if (recipeForm) { // Pastikan form ada sebelum menambahkan event listener
+    if (recipeForm) {
         recipeForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // Mencegah halaman reload
+            event.preventDefault();
             simpanResep();
         });
     }
 });
 
-
-// --- Penting: Memaparkan fungsi ke objek window agar bisa dipanggil dari HTML ---
+// --- Memaparkan fungsi ke objek window agar bisa dipanggil dari HTML ---
 window.simpanResep = simpanResep;
 window.confirmHapus = confirmHapus;
 window.loadDataResep = loadDataResep;
 window.editResep = editResep;
 window.resetForm = resetForm;
-window.showPage = showPage; // Ini yang paling penting untuk error Anda!
+window.showPage = showPage;
