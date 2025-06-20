@@ -10,9 +10,11 @@ body {
     min-height: 100vh;
     overflow-y: auto;
 }
+
+/* Perubahan pada bg-card */
 .bg-card {
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 3rem;
+    padding: 3rem; /* Default padding untuk desktop/besar */
     border-radius: 15px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     max-width: 600px;
@@ -108,7 +110,7 @@ body {
 }
 
 #daftarResepPage {
-    padding: 20px;
+    padding: 20px; /* Padding di sekitar daftar resep itu sendiri */
 }
 
 /* --- Perbaikan untuk Footer --- */
@@ -155,18 +157,13 @@ body {
     /* --- CSS BARU UNTUK PERILAKU COLLAPSE DI DESKTOP --- */
     /* Di desktop, paksa konten detail resep untuk selalu terlihat */
     .collapse:not(.show) {
-        display: block !important; /* Timpa display: none */
-        height: auto !important; /* Timpa height: 0 */
-        visibility: visible !important; /* Pastikan terlihat */
-        /* Tambahkan transisi jika diperlukan, tapi hati-hati agar tidak mengganggu */
+        display: block !important;
+        height: auto !important;
+        visibility: visible !important;
     }
-
-    /* Juga nonaktifkan pointer cursor untuk judul yang biasanya toggle */
     .card-title[data-bs-toggle="collapse"] {
         cursor: default !important;
     }
-
-    /* Jika ada transisi default, kita bisa coba matikan di desktop */
     .collapsing {
         transition: none !important;
     }
@@ -195,4 +192,28 @@ body {
         width: 100%;
         margin-bottom: 5px;
     }
-}   
+
+    /* --- PERBAIKAN UNTUK LAYAR MOBILE --- */
+
+    /* Mengurangi padding pada kartu di layar kecil */
+    .bg-card {
+        padding: 1.5rem; /* Mengurangi padding dari 3rem menjadi 1.5rem (sekitar 24px) */
+    }
+
+    /* Menambahkan margin horizontal pada kolom */
+    /* Ini akan memberikan ruang di sisi kiri dan kanan layar */
+    .col-md-6.col-lg-4.mb-4 {
+        padding-left: 1rem !important; /* Contoh: 16px */
+        padding-right: 1rem !important; /* Contoh: 16px */
+    }
+
+    /* Mengurangi padding di daftarResepPage agar konten lebih rapat ke tepi */
+    #daftarResepPage {
+        padding: 10px; /* Atau 1rem, sesuaikan agar tidak terlalu sempit */
+    }
+
+    /* Jika resepPage juga terlihat "gendut", terapkan padding serupa */
+    #resepPage form.bg-card {
+        padding: 1.5rem; /* Sama dengan bg-card untuk daftar resep */
+    }
+}
