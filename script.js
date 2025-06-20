@@ -121,12 +121,15 @@ async function loadDataResep() {
         container.appendChild(col);
     });
 
-    // Inisialisasi ulang komponen Bootstrap setelah DOM diperbarui
-    // Ini penting agar Bootstrap Collapse bekerja dengan benar pada elemen yang baru ditambahkan
     const collapseElements = container.querySelectorAll('.collapse');
     collapseElements.forEach(collapseEl => {
-        // eslint-disable-next-line no-undef
-        new bootstrap.Collapse(collapseEl, { toggle: false });
+        const bsCollapse = new bootstrap.Collapse(collapseEl, { toggle: false });
+
+        if (window.innerWidth >= 768) {
+            bsCollapse.show();
+        } else {
+            bsCollapse.hide();
+        }
     });
 }
 
@@ -197,6 +200,18 @@ function showPage(page) {
         document.getElementById('daftarResepPage').style.display = 'block';
         loadDataResep();
     }
+
+    // --- BARIS BARU UNTUK MENUTUP NAVBAR DI MOBILE ---
+    // Pastikan navbar-collapse ada dan sedang terbuka
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+        // eslint-disable-next-line no-undef
+        const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+        if (bsCollapse) {
+            bsCollapse.hide(); // Tutup navbar
+        }
+    }
+    // --- AKHIR BARIS BARU ---
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -209,6 +224,22 @@ document.addEventListener('DOMContentLoaded', () => {
             simpanResep();
         });
     }
+
+    // --- BARIS BARU: Menambahkan event listener ke nav-link untuk menutup navbar ---
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            const navbarCollapse = document.getElementById('navbarNav');
+            if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                // eslint-disable-next-line no-undef
+                const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                if (bsCollapse) {
+                    bsCollapse.hide();
+                }
+            }
+        });
+    });
+    // --- AKHIR BARIS BARU ---
 });
 
 // --- Memaparkan fungsi ke objek window agar bisa dipanggil dari HTML ---
