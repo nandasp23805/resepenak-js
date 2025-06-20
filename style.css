@@ -7,7 +7,6 @@ html, body {
 }
 
 body {
-    position: relative; /* Menambahkan posisi relative */
     background-image: url('image/bg1.jpg');
     background-size: cover;
     background-position: center;
@@ -28,14 +27,14 @@ body {
 }
 
 .navbar.fixed-top {
+    background-color: MediumTurquoise;
+    padding: 1rem;
+    font-family: 'Montserrat', sans-serif;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1030; /* Pastikan navbar di atas elemen lain */
-    background-color: MediumTurquoise;
-    padding: 1rem;
-    font-family: 'Montserrat', sans-serif;
+    z-index: 1030;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -69,7 +68,6 @@ body {
 }
 
 .content-wrapper {
-    position: relative; /* Menambahkan posisi relative */
     padding-top: 80px;
     min-height: calc(100vh - 0px);
     display: flex;
