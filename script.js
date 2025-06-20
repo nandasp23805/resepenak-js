@@ -2,7 +2,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const supabase = createClient(
     "https://pcqrwkvardtgkurjugra.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivGnoxrzt3k9Uo"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
 );
 
 let currentEditRecipeId = null;
@@ -75,7 +75,7 @@ async function loadDataResep() {
     }
 
     const container = document.getElementById("daftarResepList");
-    container.innerHTML = ""; // Kosongkan daftar sebelumnya
+    container.innerHTML = "";
 
     if (data.length === 0) {
         container.innerHTML = `
@@ -89,7 +89,7 @@ async function loadDataResep() {
 
     data.forEach((item) => {
         const col = document.createElement("div");
-        col.className = "col-md-6 col-lg-4 mb-4"; // Kelas kolom untuk Bootstrap grid
+        col.className = "col-md-6 col-lg-4 mb-4";
         col.innerHTML = `
             <div class="card bg-card border border-secondary shadow h-100">
                 <div class="card-body">
@@ -165,8 +165,8 @@ async function editResep(id) {
         cancelButton.type = 'button';
         cancelButton.onclick = function() {
             resetForm();
-            // Optional: return to daftarResepPage if desired after cancelling edit
-            showPage('daftarResep'); 
+            loadDataResep();
+            showPage('daftarResep');
         };
         document.getElementById('submitButton').parentNode.appendChild(cancelButton);
     }
@@ -179,13 +179,6 @@ function showPage(page) {
     document.getElementById('homePage').style.display = 'none';
     document.getElementById('resepPage').style.display = 'none';
     document.getElementById('daftarResepPage').style.display = 'none';
-
-    // Tutup navbar di HP jika sedang terbuka
-    const navbarCollapse = document.getElementById('navbarNav');
-    const bsCollapse = new bootstrap.Collapse(navbarCollapse, { toggle: false });
-    if (navbarCollapse.classList.contains('show')) {
-        bsCollapse.hide();
-    }
 
     if (page === 'home') {
         document.getElementById('homePage').style.display = 'flex';
