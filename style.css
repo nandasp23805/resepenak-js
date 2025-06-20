@@ -11,17 +11,15 @@ body {
     overflow-y: auto;
 }
 
-/* Perubahan pada bg-card */
 .bg-card {
     background-color: rgba(255, 255, 255, 0.9);
-    padding: 3rem; /* Default padding untuk desktop/besar */
+    padding: 3rem;
     border-radius: 15px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     max-width: 600px;
     margin: 0 auto;
 }
 
-/* CSS untuk navbar (sekarang fixed-top) */
 .navbar.fixed-top {
     background-color: MediumTurquoise;
     padding: 1rem;
@@ -34,7 +32,6 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Adjustments for the brand and toggler within the fixed navbar */
 .navbar-brand {
     color: #333;
     margin-bottom: 0 !important;
@@ -53,7 +50,6 @@ body {
     font-size: 1.25rem;
 }
 
-/* CSS untuk link di navbar (sebelumnya sidebar) */
 .navbar-nav .nav-link {
     color: white;
     font-weight: 500;
@@ -65,7 +61,6 @@ body {
     border-radius: 5px;
 }
 
-/* Wrapper untuk konten utama di bawah navbar yang tetap */
 .content-wrapper {
     padding-top: 80px;
     min-height: calc(100vh - 0px);
@@ -110,17 +105,15 @@ body {
 }
 
 #daftarResepPage {
-    padding: 20px; /* Padding di sekitar daftar resep itu sendiri */
+    padding: 20px;
 }
 
-/* --- Perbaikan untuk Footer --- */
 .footer {
-    background-color: MediumTurquoise; /* Warna latar belakang footer */
-    color: white; /* Pastikan teks tetap putih atau sesuaikan */
+    background-color: MediumTurquoise;
+    color: white;
 }
 
-
-/* Media query untuk ukuran layar desktop (min-width: 768px) */
+/* Media query for desktop screens (min-width: 768px) */
 @media (min-width: 768px) {
     .navbar.fixed-top .container-fluid {
         flex-direction: row !important;
@@ -149,13 +142,11 @@ body {
         margin-right: 0;
     }
 
-    /* Logo di Home page ukuran lebih besar untuk desktop */
     #homePage img {
         width: 300px;
     }
 
-    /* --- CSS BARU UNTUK PERILAKU COLLAPSE DI DESKTOP --- */
-    /* Di desktop, paksa konten detail resep untuk selalu terlihat */
+    /* Collapse behavior for desktop */
     .collapse:not(.show) {
         display: block !important;
         height: auto !important;
@@ -169,7 +160,7 @@ body {
     }
 }
 
-/* Adjustments for smaller screens (mobile toggle menu) */
+/* Media query for smaller screens (max-width: 767.98px) */
 @media (max-width: 767.98px) {
     .navbar-collapse {
         background-color: MediumTurquoise;
@@ -193,27 +184,27 @@ body {
         margin-bottom: 5px;
     }
 
-    /* --- PERBAIKAN UNTUK LAYAR MOBILE --- */
-
-    /* Mengurangi padding pada kartu di layar kecil */
+    /* Mobile specific adjustments for cards */
     .bg-card {
-        padding: 1.5rem; /* Mengurangi padding dari 3rem menjadi 1.5rem (sekitar 24px) */
+        padding: 1rem;
     }
 
-    /* Menambahkan margin horizontal pada kolom */
-    /* Ini akan memberikan ruang di sisi kiri dan kanan layar */
+    #daftarResepPage .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
     .col-md-6.col-lg-4.mb-4 {
-        padding-left: 1rem !important; /* Contoh: 16px */
-        padding-right: 1rem !important; /* Contoh: 16px */
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+        margin-bottom: 1rem !important;
     }
 
-    /* Mengurangi padding di daftarResepPage agar konten lebih rapat ke tepi */
     #daftarResepPage {
-        padding: 10px; /* Atau 1rem, sesuaikan agar tidak terlalu sempit */
+        padding: 0.5rem;
     }
 
-    /* Jika resepPage juga terlihat "gendut", terapkan padding serupa */
     #resepPage form.bg-card {
-        padding: 1.5rem; /* Sama dengan bg-card untuk daftar resep */
+        padding: 1rem;
     }
 }
