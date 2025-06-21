@@ -311,4 +311,4 @@ window.confirmHapus = confirmHapus;
 window.loadDataResep = loadDataResep;
 window.editResep = editResep;
 window.resetForm = resetForm;
-window.showPage = showPage;
+window.showPage = showPage; 
