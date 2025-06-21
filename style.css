@@ -112,14 +112,26 @@ body {
     height: auto;
 }
 
-/* Perbaikan untuk Footer */
+/* --- Perubahan untuk Footer --- */
 .footer {
     background-color: MediumTurquoise;
     color: white;
-    /* Tambahkan ini agar footer tetap di bawah, bahkan saat konten sedikit */
     margin-top: auto;
+    /* Secara default sembunyikan footer */
+    display: none;
 }
 
+/* Tampilkan footer hanya jika body memiliki kelas home-page-active */
+body.home-page-active .footer {
+    display: block;
+}
+
+/* --- Perubahan untuk Posisi Label Form --- */
+/* Pastikan label rata kiri di halaman resep */
+#resepPage form .form-label {
+    text-align: left; /* Mengatur teks label rata kiri */
+    display: block; /* Memastikan label mengambil lebar penuh */
+}
 
 /* Media query for desktop screens (min-width: 768px) */
 @media (min-width: 768px) {
@@ -251,4 +263,4 @@ body {
     #resepPage form.bg-card {
         padding: 1rem;
     }
-}   
+}
