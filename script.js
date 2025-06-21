@@ -2,7 +2,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 
 const supabase = createClient(
     "https://pcqrwkvardtgkurjugra.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0ylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
 );
 
 let currentEditRecipeId = null;
@@ -179,16 +179,8 @@ async function editResep(id) {
             loadDataResep();
             showPage('daftarResep');
         };
-        // Memastikan tombol "Batal Edit" berada di samping tombol "Simpan/Perbarui"
-        // Ini memastikan elemennya ada sebelum mencoba menambahkan sibling
-        const submitButton = document.getElementById('submitButton');
-        if (submitButton) {
-            submitButton.parentNode.appendChild(cancelButton);
-        } else {
-            console.error("Submit button not found to append cancel button.");
-        }
+        document.getElementById('submitButton').parentNode.appendChild(cancelButton);
     }
-    // PASTIKAN showPage('resep') DIPANGGIL DI SINI!
     showPage('resep');
 }
 
@@ -208,12 +200,11 @@ function showPage(page) {
         document.getElementById('homePage').style.display = 'flex';
         document.body.classList.add('home-page');
     } else if (page === 'resep') {
-        document.getElementById('resepPage').style.display = 'block'; // Pastikan ini block
+        document.getElementById('resepPage').style.display = 'block';
         document.body.classList.add('resep-page');
-        // resetForm() dipanggil di dalam editResep sebelum showPage jika itu mode edit
-        // Jika dari Tambah Resep normal, maka resetForm() dipanggil setelah showPage('resep')
+        resetForm();
     } else if (page === 'daftarResep') {
-        document.getElementById('daftarResepPage').style.display = 'block'; // Pastikan ini block
+        document.getElementById('daftarResepPage').style.display = 'block';
         document.body.classList.add('daftar-resep-page');
         loadDataResep();
     }
@@ -242,13 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-
+            // Logika penutupan navbar sudah di showPage, ini hanya untuk memastikan klik link tetap memicu
         });
-    });
-
-    // Menangani klik link Tambah Resep dari navbar agar form di-reset
-    document.querySelector('a[onclick="showPage(\'resep\')"]').addEventListener('click', () => {
-        resetForm(); // Pastikan form di-reset saat membuka halaman Tambah Resep dari navbar
     });
 });
 
