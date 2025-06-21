@@ -34,7 +34,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1030; /* Tetap paling atas */
+    z-index: 1030;
     background-color: MediumTurquoise;
     padding: 1rem;
     font-family: 'Montserrat', sans-serif;
@@ -76,7 +76,6 @@ body {
     flex-grow: 1; /* Pastikan mengambil sisa ruang vertikal yang tersedia */
     display: flex;
     flex-direction: column;
-    /* overflow-y tidak perlu di sini, biarkan child-nya yang mengatur atau body */
 }
 
 #homePage, #resepPage, #daftarResepPage {
@@ -84,9 +83,6 @@ body {
     display: flex; /* Untuk memposisikan konten di dalamnya */
     flex-direction: column;
     padding: 20px;
-    /* Tambahkan z-index untuk memastikan tumpukan halaman yang benar */
-    position: relative; 
-    z-index: 10; /* Z-index ini harus lebih rendah dari navbar */
 }
 
 #homePage {
@@ -120,14 +116,12 @@ body {
 #resepPage {
     justify-content: center; /* Memusatkan vertikal untuk resep */
     align-items: center; /* Memusatkan horizontal untuk resep */
-    /* Akan ditangani oleh media query untuk scroll jika perlu */
 }
 
 #daftarResepPage {
     justify-content: flex-start; /* Konten di daftar resep dimulai dari atas */
     align-items: flex-start; /* Konten di daftar resep dimulai dari kiri */
     text-align: left; /* Teks di daftar resep rata kiri */
-    /* Akan ditangani oleh media query untuk scroll jika perlu */
 }
 
 /* --- KONTROL VISIBILITAS FOOTER --- */
@@ -139,7 +133,7 @@ body {
     text-align: center;
     width: 100%;
     flex-shrink: 0;
-    z-index: 1000; /* Lebih rendah dari navbar */
+    z-index: 1000;
 }
 
 /* Tampilkan footer HANYA jika body punya kelas 'home-page' */
@@ -153,22 +147,22 @@ body.home-page .footer {
         overflow-y: hidden; /* Home page tidak discroll */
     }
     body.home-page .content-wrapper {
-        height: calc(100vh - 80px - 50px); /* Asumsi footer 50px */
+        /* Kurangi tinggi navbar (80px) dan tinggi footer (asumsi 50px) */
+        height: calc(100vh - 80px - 50px);
         overflow-y: hidden;
     }
 
-    /* Perbaikan untuk resepPage dan daftarResepPage di desktop */
     body.resep-page {
-        overflow-y: auto; /* Biarkan body discroll jika form lebih panjang */
+        overflow-y: hidden; /* Tambah Resep page tidak discroll */
     }
     body.resep-page .content-wrapper {
-        min-height: calc(100vh - 80px); /* Konten minimal setinggi viewport setelah navbar */
-        height: auto; /* Biarkan tingginya otomatis mengikuti konten */
-        overflow-y: visible; /* Biarkan konten keluar dari wrapper untuk body scroll */
+        /* Hanya kurangi tinggi navbar (tidak ada footer di sini) */
+        height: calc(100vh - 80px);
+        overflow-y: hidden;
     }
 
     body.daftar-resep-page {
-        overflow-y: auto; /* Biarkan body discroll jika daftar resep lebih panjang */
+        overflow-y: auto; /* Daftar Resep page bisa discroll (body yang scroll) */
     }
     body.daftar-resep-page .content-wrapper {
         min-height: calc(100vh - 80px); /* Konten minimal setinggi viewport setelah navbar */
@@ -176,19 +170,22 @@ body.home-page .footer {
         overflow-y: visible; /* Biarkan konten keluar dari wrapper untuk body scroll */
     }
 
-    /* #homePage tetap tidak bisa discroll */
-    #homePage {
+    /* Halaman Home dan Tambah Resep: tidak ada scroll di elemen page itu sendiri */
+    #homePage, #resepPage {
         overflow-y: hidden;
         padding-bottom: 0;
         padding-top: 0;
     }
 
-    /* Aturan untuk form di resepPage */
+    /* Daftar Resep Page: tidak perlu overflow di sini, karena body yang scroll */
+    #daftarResepPage {
+        overflow-y: visible; /* Biarkan kontennya mengalir normal */
+        height: auto; /* Biarkan tingginya otomatis */
+    }
+
     #resepPage form.bg-card {
-        max-height: calc(100vh - 80px - 40px); /* Max tinggi form (viewport - navbar - padding) */
-        overflow-y: auto; /* Form itu sendiri bisa discroll jika terlalu panjang */
-        margin-top: 20px; /* Sedikit jarak dari atas */
-        margin-bottom: 20px; /* Sedikit jarak dari bawah */
+        max-height: 100%;
+        overflow-y: auto;
     }
 
     .navbar.fixed-top .container-fluid {
@@ -222,18 +219,16 @@ body.home-page .footer {
         width: 300px;
     }
 
-    /* HAPUS ATURAN INI UNTUK COLLAPSE! Biarkan Bootstrap yang mengelolanya. */
-    /* .collapse:not(.show) {
+    .collapse:not(.show) {
         display: block !important;
         height: auto !important;
         visibility: visible !important;
-    } */
+    }
     .card-title[data-bs-toggle="collapse"] {
-        /* Kembalikan cursor pointer jika Anda ingin bisa klik judul untuk tutup/buka */
-        cursor: pointer !important; 
+        cursor: default !important;
     }
     .collapsing {
-        transition: height 0.35s ease !important; /* Kembalikan transisi default Bootstrap */
+        transition: none !important;
     }
 }
 
@@ -242,7 +237,7 @@ body.home-page .footer {
         overflow-y: auto; /* Di mobile, biarkan body discroll secara default */
     }
     .content-wrapper {
-        min-height: calc(100vh - 0px); /* Sesuaikan dengan tinggi navbar mobile jika ada */
+        min-height: calc(100vh - 0px);
         height: auto;
         overflow-y: auto;
     }
@@ -254,6 +249,7 @@ body.home-page .footer {
     .footer {
         display: block; /* Pastikan footer terlihat di mobile jika tidak disembunyikan oleh kelas page lain */
     }
+
 
     .navbar-collapse {
         background-color: MediumTurquoise;
@@ -277,10 +273,6 @@ body.home-page .footer {
         margin-bottom: 5px;
     }
 
-    .navbar-nav .nav-item:last-child {
-        margin-right: 0;
-    }
-
     .bg-card {
         padding: 1rem;
     }
@@ -302,10 +294,5 @@ body.home-page .footer {
 
     #resepPage form.bg-card {
         padding: 1rem;
-        /* Tambahkan aturan overflow dan tinggi untuk form di mobile juga */
-        max-height: calc(100vh - 80px - 20px); /* Tinggi viewport - navbar - padding */
-        overflow-y: auto; /* Biarkan form bisa discroll jika panjang */
-        margin-top: 10px;
-        margin-bottom: 10px;
     }
 }

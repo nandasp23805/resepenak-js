@@ -10,7 +10,7 @@ let currentEditRecipeId = null;
 // --- Definisi Fungsi ---
 
 async function simpanResep() {
-    console.log("Simpan Resep dipanggil.");
+    console.log("simpanResep() called.");
     const judul = document.getElementById("judul").value;
     const alat = document.getElementById("alat").value;
     const bahan = document.getElementById("bahan").value;
@@ -22,16 +22,16 @@ async function simpanResep() {
     }
 
     if (currentEditRecipeId) {
-        console.log("Memperbarui resep dengan ID:", currentEditRecipeId);
+        console.log("Updating recipe with ID:", currentEditRecipeId);
         await updateResep(currentEditRecipeId, judul, alat, bahan, steps);
     } else {
-        console.log("Menambahkan resep baru.");
+        console.log("Adding new recipe.");
         const { data, error } = await supabase
             .from('resepenak')
             .insert([{ judul: judul, alat: alat, bahan: bahan, steps: steps }]);
 
         if (error) {
-            console.error("Gagal menambahkan resep:", error.message);
+            console.error("Failed to add recipe:", error.message);
             return alert("Gagal menambahkan resep: " + error.message);
         }
         alert("Resep berhasil ditambahkan!");
@@ -43,21 +43,21 @@ async function simpanResep() {
 }
 
 async function updateResep(id, judul, alat, bahan, steps) {
-    console.log("Fungsi updateResep dipanggil untuk ID:", id);
+    console.log("updateResep() called for ID:", id);
     const { data, error } = await supabase
         .from('resepenak')
         .update({ judul: judul, alat: alat, bahan: bahan, steps: steps })
         .eq('id', id);
 
     if (error) {
-        console.error("Gagal memperbarui resep:", error.message);
+        console.error("Failed to update recipe:", error.message);
         return alert("Gagal memperbarui resep: " + error.message);
     }
     alert("Resep berhasil diperbarui!");
 }
 
 function resetForm() {
-    console.log("Resetting form...");
+    console.log("resetForm() called.");
     document.getElementById("judul").value = "";
     document.getElementById("alat").value = "";
     document.getElementById("bahan").value = "";
@@ -67,22 +67,27 @@ function resetForm() {
     const cancelButton = document.getElementById('cancelEditButton');
     if (cancelButton) {
         cancelButton.remove();
+        console.log("Cancel Edit button removed.");
     }
 }
 
 async function loadDataResep() {
-    console.log("Loading data resep from Supabase...");
+    console.log("loadDataResep() called. Loading data from Supabase...");
     let query = supabase.from("resepenak").select("*");
     const { data, error } = await query.order('id', { ascending: false });
 
     if (error) {
-        console.error("Data gagal diambil:", error.message);
+        console.error("Failed to fetch data:", error.message);
         return alert("Data gagal diambil: " + error.message + ". Pastikan koneksi Supabase dan RLS Policy sudah benar.");
     }
 
-    console.log("Data resep berhasil diambil:", data);
+    console.log("Recipe data fetched successfully:", data);
 
     const container = document.getElementById("daftarResepList");
+    if (!container) {
+        console.error("Element #daftarResepList not found!");
+        return;
+    }
     container.innerHTML = "";
 
     if (data.length === 0) {
@@ -92,6 +97,7 @@ async function loadDataResep() {
                 <p class="text-muted">Tidak ada resep yang ditemukan.</p>
             </div>
         `;
+        console.log("No recipes found. Displaying 'No Recipes' message.");
         return;
     }
 
@@ -139,17 +145,18 @@ async function loadDataResep() {
             bsCollapse.hide(); // Di mobile, sembunyikan collapse secara default
         }
     });
+    console.log("Recipes rendered. Collapse state set based on screen width.");
 }
 
 async function confirmHapus(id) {
-    console.log("Confirm Hapus dipanggil untuk ID:", id);
+    console.log("confirmHapus() called for ID:", id);
     if (!confirm("Anda yakin ingin menghapus resep ini?")) {
         return;
     }
 
     const { data, error } = await supabase.from("resepenak").delete().eq("id", id);
     if (error) {
-        console.error("Gagal menghapus resep:", error.message);
+        console.error("Failed to delete recipe:", error.message);
         return alert("Gagal menghapus resep: " + error.message);
     }
     alert("Resep berhasil dihapus!");
@@ -157,7 +164,7 @@ async function confirmHapus(id) {
 }
 
 async function editResep(id) {
-    console.log("--- Memulai editResep untuk ID:", id, "---");
+    console.log("--- editResep() called for ID:", id, "---");
     const { data, error } = await supabase
         .from('resepenak')
         .select('*')
@@ -165,16 +172,14 @@ async function editResep(id) {
         .single();
 
     if (error) {
-        console.error("Gagal mengambil data resep untuk diedit:", error.message);
+        console.error("Failed to fetch recipe data for editing:", error.message);
         return alert("Gagal mengambil data resep untuk diedit: " + error.message);
     }
-    console.log("Data resep yang berhasil diambil:", data);
+    console.log("Recipe data fetched successfully for editing:", data);
 
-    // *PENTING*: Panggil showPage('resep') *SEBELUM* mengisi form.
-    // Ini memastikan elemen form terlihat dan bisa diisi.
+    // Panggil showPage('resep') *SEBELUM* mengisi form, ini penting!
     showPage('resep');
-    console.log("Halaman 'resep' dipanggil. Current display of #resepPage:", document.getElementById('resepPage').style.display);
-
+    console.log("Navigated to 'resep' page. Current display of #resepPage:", document.getElementById('resepPage').style.display);
 
     // Isi formulir dengan data yang diambil
     const judulInput = document.getElementById("judul");
@@ -183,20 +188,24 @@ async function editResep(id) {
     const stepsInput = document.getElementById("steps");
     const submitButton = document.getElementById("submitButton");
 
-    if (judulInput) judulInput.value = data.judul;
-    else console.warn("Element #judul not found!");
+    if (judulInput) { judulInput.value = data.judul; console.log("Judul set:", data.judul); }
+    else { console.warn("Element #judul not found!"); }
     
-    if (alatInput) alatInput.value = data.alat;
-    else console.warn("Element #alat not found!");
+    if (alatInput) { alatInput.value = data.alat; console.log("Alat set:", data.alat); }
+    else { console.warn("Element #alat not found!"); }
     
-    if (bahanInput) bahanInput.value = data.bahan;
-    else console.warn("Element #bahan not found!");
+    if (bahanInput) { bahanInput.value = data.bahan; console.log("Bahan set:", data.bahan); }
+    else { console.warn("Element #bahan not found!"); }
     
-    if (stepsInput) stepsInput.value = data.steps;
-    else console.warn("Element #steps not found!");
+    if (stepsInput) { stepsInput.value = data.steps; console.log("Steps set:", data.steps); }
+    else { console.warn("Element #steps not found!"); }
 
-    if (submitButton) submitButton.textContent = "Perbarui";
-    else console.warn("Element #submitButton not found!");
+    if (submitButton) {
+        submitButton.textContent = "Perbarui";
+        console.log("Submit button text set to 'Perbarui'.");
+    } else {
+        console.warn("Element #submitButton not found!");
+    }
 
     currentEditRecipeId = id;
 
@@ -208,49 +217,53 @@ async function editResep(id) {
         cancelButton.textContent = 'Batal Edit';
         cancelButton.type = 'button';
         cancelButton.onclick = function() {
+            console.log("Cancel Edit button clicked.");
             resetForm();
             loadDataResep();
             showPage('daftarResep');
         };
         if (submitButton && submitButton.parentNode) {
             submitButton.parentNode.appendChild(cancelButton);
+            console.log("Cancel Edit button appended.");
         } else {
             console.warn("Submit button or its parent not found to append cancel button.");
         }
     }
-    console.log("--- editResep selesai, form seharusnya terisi ---");
+    console.log("--- editResep() finished. Form should be populated. ---");
 }
 
 // --- Navigasi Halaman dan Inisialisasi ---
 
 function showPage(page) {
-    console.log("--> showPage dipanggil untuk:", page);
+    console.log(`showPage('${page}') called.`);
+    
+    const homePage = document.getElementById('homePage');
+    const resepPage = document.getElementById('resepPage');
+    const daftarResepPage = document.getElementById('daftarResepPage');
+
     // Sembunyikan semua halaman
-    document.getElementById('homePage').style.display = 'none';
-    document.getElementById('resepPage').style.display = 'none';
-    document.getElementById('daftarResepPage').style.display = 'none';
+    if (homePage) homePage.style.display = 'none';
+    if (resepPage) resepPage.style.display = 'none';
+    if (daftarResepPage) daftarResepPage.style.display = 'none';
 
     // Hapus semua kelas penanda halaman dari body
     document.body.classList.remove('home-page', 'resep-page', 'daftar-resep-page');
 
     // Tampilkan halaman yang diminta dan tambahkan kelas ke body
     if (page === 'home') {
-        document.getElementById('homePage').style.display = 'flex';
+        if (homePage) homePage.style.display = 'flex';
         document.body.classList.add('home-page');
     } else if (page === 'resep') {
-        document.getElementById('resepPage').style.display = 'block'; // PENTING: Gunakan 'block' untuk form
+        if (resepPage) resepPage.style.display = 'block'; // Penting: Gunakan 'block' untuk form
         document.body.classList.add('resep-page');
-        // KONDISI PENTING: JANGAN resetForm() di sini!
-        // resetForm() hanya dipanggil saat navigasi dari navbar ke "Tambah Resep"
-        // atau setelah simpan/update form.
+        // JANGAN resetForm() di sini. Ini ditangani saat navigasi dari navbar
+        // atau saat editResep memanggil showPage('resep')
     } else if (page === 'daftarResep') {
-        document.getElementById('daftarResepPage').style.display = 'block'; // PENTING: Gunakan 'block'
+        if (daftarResepPage) daftarResepPage.style.display = 'block'; // Penting: Gunakan 'block'
         document.body.classList.add('daftar-resep-page');
-        loadDataResep();
+        loadDataResep(); // Panggil loadDataResep setiap kali halaman daftar resep ditampilkan
     }
-    console.log("Current display of #homePage:", document.getElementById('homePage').style.display);
-    console.log("Current display of #resepPage:", document.getElementById('resepPage').style.display);
-    console.log("Current display of #daftarResepPage:", document.getElementById('daftarResepPage').style.display);
+    console.log(`Display state: homePage=${homePage?.style.display}, resepPage=${resepPage?.style.display}, daftarResepPage=${daftarResepPage?.style.display}`);
 
 
     // Tutup navbar di mobile setelah navigasi
@@ -259,6 +272,7 @@ function showPage(page) {
         const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
         if (bsCollapse) {
             bsCollapse.hide();
+            console.log("Navbar collapsed.");
         }
     }
 }
@@ -273,21 +287,21 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             simpanResep();
         });
+        console.log("Recipe form submit listener attached.");
     }
 
     // Menangani klik link Navbar
     const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', (event) => {
-            const linkText = event.target.textContent.trim();
-            console.log("Navbar link clicked:", linkText);
-            
-            // Panggil resetForm() hanya jika link yang diklik adalah "Tambahkan Resep"
-            if (linkText === 'Tambahkan Resep') {
-                resetForm(); 
+            const pageTarget = event.target.getAttribute('onclick'); // Mengambil onclick attribute
+            if (pageTarget && pageTarget.includes("showPage('resep')")) {
+                console.log("Navbar link 'Tambahkan Resep' clicked. Resetting form.");
+                resetForm(); // Reset form hanya ketika menuju Tambah Resep dari navbar
             }
-            // showPage akan dipanggil oleh atribut onclick di HTML, jadi tidak perlu panggil lagi di sini.
+            // showPage akan dipanggil oleh atribut onclick di HTML Anda, jadi tidak perlu panggil lagi di sini.
         });
+        console.log(`Navbar link '${link.textContent.trim()}' listener attached.`);
     });
 });
 
