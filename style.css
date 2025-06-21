@@ -1,7 +1,8 @@
 /* style.css */
 
+/* --- Base Styles & Layout --- */
 html, body {
-    height: 100%; /* Penting: Pastikan html dan body mengambil tinggi penuh viewport */
+    height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -12,11 +13,19 @@ body {
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    margin-top: 0; /* Pastikan ini 0 karena padding-top akan di content-wrapper */
-    min-height: 100vh; /* Tetap pertahankan ini untuk fallback dan responsivitas */
-    overflow-y: auto; /* Default untuk mobile/layar kecil */
+    min-height: 100vh;
+    overflow-y: auto; /* Default for mobile/small screens */
 }
 
+/* Wrapper for main content below the fixed navbar */
+.content-wrapper {
+    padding-top: 80px; /* Adjust based on navbar height */
+    min-height: calc(100vh - 0px); /* Will be adjusted for desktop */
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Reusable Components --- */
 .bg-card {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 3rem;
@@ -26,6 +35,7 @@ body {
     margin: 0 auto;
 }
 
+/* --- Navbar Styles --- */
 .navbar.fixed-top {
     background-color: MediumTurquoise;
     padding: 1rem;
@@ -44,11 +54,13 @@ body {
     display: flex;
     align-items: center;
 }
+
 .navbar-brand img {
     width: 45px;
     height: 45px;
     margin-right: 0.5rem;
 }
+
 .navbar-brand span {
     font-weight: 700;
     color: #333;
@@ -62,30 +74,23 @@ body {
     transition: all 0.3s ease;
     padding: 0.8rem 1rem;
 }
+
 .navbar-nav .nav-link:hover {
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 5px;
 }
 
-/* Wrapper untuk konten utama di bawah navbar yang tetap */
-.content-wrapper {
-    padding-top: 80px;
-    min-height: calc(100vh - 0px); /* Ini akan kita sesuaikan di desktop */
-    display: flex; /* Tambahkan ini agar konten di dalamnya bisa mengisi tinggi */
-    flex-direction: column; /* Pastikan konten mengalir vertikal */
-}
-
-/* Halaman Home dan Tambah Resep akan mengisi tinggi penuh yang tersedia */
+/* --- Page Specific Styles --- */
+/* Home and Add Recipe pages fill available height and center content */
 #homePage, #resepPage {
-    flex-grow: 1; /* Agar mengambil sisa ruang vertikal */
-    display: flex; /* Untuk konten di dalamnya (flex-direction: column, justify-content: center) */
+    flex-grow: 1;
+    display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; /* Untuk #homePage */
-    text-align: center; /* Untuk #homePage */
+    align-items: center;
+    text-align: center;
     color: #333;
     padding: 20px;
-    /* overflow-y: hidden; (Ini akan dipindahkan ke media query desktop) */
 }
 
 #homePage {
@@ -93,6 +98,7 @@ body {
     background-image: none;
     border-radius: 0;
 }
+
 #homePage h1 {
     font-size: 3rem;
     font-weight: 700;
@@ -100,64 +106,62 @@ body {
     color: black;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
+
 #homePage p {
     font-size: 1.2rem;
     max-width: 600px;
     color: black;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
 }
+
 #homePage img {
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.7));
     width: 200px;
     height: auto;
 }
 
-/* --- Perubahan untuk Footer --- */
+/* --- Footer Styles --- */
 .footer {
     background-color: MediumTurquoise;
     color: white;
     margin-top: auto;
-    /* Secara default sembunyikan footer */
-    display: none;
+    display: none; /* Hidden by default */
 }
 
-/* Tampilkan footer hanya jika body memiliki kelas home-page-active */
+/* Show footer only on home page via JS adding 'home-page-active' class to body */
 body.home-page-active .footer {
     display: block;
 }
 
-/* --- Perubahan untuk Posisi Label Form --- */
-/* Pastikan label rata kiri di halaman resep */
+/* --- Form Label Alignment --- */
 #resepPage form .form-label {
-    text-align: left; /* Mengatur teks label rata kiri */
-    display: block; /* Memastikan label mengambil lebar penuh */
+    text-align: left;
+    display: block;
 }
 
-/* Media query for desktop screens (min-width: 768px) */
+/* --- Media Queries for Responsive Design --- */
+
+/* Desktop screens (min-width: 768px) */
 @media (min-width: 768px) {
-    /* Penting: Nonaktifkan scroll pada body di desktop */
     body {
-        overflow-y: hidden;
+        overflow-y: hidden; /* Prevent body scroll on desktop */
     }
 
-    /* Pastikan content-wrapper mengambil sisa tinggi setelah navbar dan footer */
     .content-wrapper {
-        height: calc(100vh - 80px); /* Tinggi viewport dikurangi tinggi navbar */
-        min-height: auto; /* Nonaktifkan min-height di desktop */
-        overflow-y: hidden; /* Kontainer utama tidak scroll */
+        height: calc(100vh - 80px); /* Full height minus navbar */
+        min-height: auto;
+        overflow-y: hidden; /* Main container doesn't scroll */
     }
 
-    /* Halaman Home dan Tambah Resep di desktop tidak perlu scroll */
     #homePage, #resepPage {
-        overflow-y: hidden; /* Pastikan halaman itu sendiri tidak scroll */
-        padding-bottom: 0; /* Hapus padding-bottom agar tidak ada scroll yang tidak perlu */
-        padding-top: 0; /* Hapus padding-top agar tidak ada scroll yang tidak perlu */
+        overflow-y: hidden; /* Specific pages don't scroll */
+        padding-bottom: 0;
+        padding-top: 0;
     }
 
-    /* Jika form di resepPage terlalu tinggi, kita bisa batasi tingginya dan buat formnya scroll */
     #resepPage form.bg-card {
-        max-height: 100%; /* Ambil tinggi penuh yang tersedia */
-        overflow-y: auto; /* Buat scroll hanya di dalam form jika kontennya melebihi */
+        max-height: 100%;
+        overflow-y: auto; /* Form content scrolls if it overflows */
     }
 
     .navbar.fixed-top .container-fluid {
@@ -191,6 +195,7 @@ body.home-page-active .footer {
         width: 300px;
     }
 
+    /* Bootstrap collapse override for desktop (always open) */
     .collapse:not(.show) {
         display: block !important;
         height: auto !important;
@@ -204,19 +209,20 @@ body.home-page-active .footer {
     }
 }
 
-/* Media query for smaller screens (max-width: 767.98px) */
+/* Mobile screens (max-width: 767.98px) */
 @media (max-width: 767.98px) {
-    /* Kembalikan overflow-y: auto untuk body di mobile jika diperlukan */
     body {
+        overflow-y: auto; /* Allow body scroll on mobile */
+    }
+
+    .content-wrapper {
+        min-height: calc(100vh - 0px);
+        height: auto;
         overflow-y: auto;
     }
-    .content-wrapper {
-        min-height: calc(100vh - 0px); /* Tetap pakai min-height asli */
-        height: auto; /* Biarkan tingginya otomatis */
-        overflow-y: auto; /* Biarkan scroll jika konten melebihi */
-    }
+
     #homePage, #resepPage {
-        overflow-y: auto; /* Halaman bisa scroll di mobile */
+        overflow-y: auto; /* Pages can scroll on mobile */
     }
 
     .navbar-collapse {
@@ -230,15 +236,28 @@ body.home-page-active .footer {
         padding-bottom: 10px;
         z-index: 1020;
     }
+
     .navbar-nav {
         flex-direction: column !important;
         align-items: flex-start;
         width: 100%;
         padding: 0 15px;
     }
+
     .navbar-nav .nav-item {
         width: 100%;
         margin-bottom: 5px;
+    }
+
+    /* Navbar Toggler (Hamburger Icon) adjustments for mobile */
+    .navbar-toggler {
+        margin-right: 0.5rem; /* Push it slightly to the right edge */
+        border: none; /* Remove default border */
+    }
+
+    .navbar-toggler-icon {
+        /* Change icon color to black by overriding Bootstrap's SVG background-image */
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
     }
 
     .bg-card {
