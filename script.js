@@ -129,7 +129,6 @@ async function loadDataResep() {
     });
 
     // Inisialisasi ulang Bootstrap collapse setelah DOM diperbarui
-    // Ini memastikan semua collapse diinisialisasi dengan benar dan tertutup secara default di mobile
     const collapseElements = container.querySelectorAll('.collapse');
     collapseElements.forEach(element => {
         if (bootstrap.Collapse.getInstance(element)) {
@@ -203,8 +202,10 @@ function showPage(page) {
 
 // === Inisialisasi ===
 document.addEventListener("DOMContentLoaded", () => {
-    showPage("daftarResep"); // Buka halaman daftar resep saat awal
-    // loadDataResep(); // Dihapus karena sudah dipanggil di showPage('daftarResep')
+    // Mengubah halaman awal ke 'home'
+    showPage("home");
+    // loadDataResep() tidak perlu dipanggil di sini karena sudah dipanggil oleh showPage('daftarResep')
+    // ketika halaman 'daftarResep' diakses melalui navigasi.
 
     document.getElementById("recipeForm").addEventListener("submit", e => {
         e.preventDefault();
