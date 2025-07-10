@@ -1,8 +1,8 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
 const supabase = createClient(
-    "https://pcqrwkvardtgkurjugra.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
+  "https://pcqrwkvardtgkurjugra.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBjcXJ3a3ZhcmR0Z2t1cmp1Z3JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5ODkyNjYsImV4cCI6MjA2NTU2NTI2Nn0.SUVJnM82j0WylXBM2Qf7WTjz17xzivwGnoxrzt3k9Uo"
 );
 
 let currentEditRecipeId = null;
@@ -177,11 +177,16 @@ function showPage(page) {
     const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
     if (bsCollapse) bsCollapse.hide();
   }
+
+  if (page === 'daftarResep') {
+    loadDataResep(); // Muat ulang data tiap ke halaman daftar resep
+  }
 }
 
 // === Inisialisasi ===
 document.addEventListener("DOMContentLoaded", () => {
-  showPage("home");
+  showPage("daftarResep"); // Buka halaman daftar resep saat awal
+  loadDataResep(); // Muat data awal
 
   document.getElementById("recipeForm").addEventListener("submit", e => {
     e.preventDefault();
@@ -204,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// === Ekspor Fungsi ===
+// === Ekspor Fungsi untuk HTML ===
 window.simpanResep = simpanResep;
 window.loadDataResep = loadDataResep;
 window.confirmHapus = confirmHapus;
