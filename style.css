@@ -173,18 +173,22 @@ body.home-page-active .footer {
     }
 
     /* BEGIN Home Page desktop specific adjustments */
+    #homePage {
+        padding-top: 50px; /* Menambahkan padding atas untuk menggeser ke bawah */
+    }
+
     #homePage h1 {
-        font-size: 4.5rem; /* Ukuran font lebih besar untuk desktop */
-        margin-bottom: 30px; /* Jarak bawah sedikit lebih besar */
+        font-size: 5.5rem; /* Ukuran font lebih besar lagi untuk desktop */
+        margin-bottom: 40px; /* Jarak bawah sedikit lebih besar */
     }
 
     #homePage p {
-        font-size: 1.5rem; /* Ukuran font paragraf lebih besar */
-        max-width: 800px; /* Lebar maksimum paragraf lebih besar */
+        font-size: 1.8rem; /* Ukuran font paragraf lebih besar lagi */
+        max-width: 900px; /* Lebar maksimum paragraf lebih besar */
     }
 
     #homePage img {
-        width: 350px; /* Ukuran gambar lebih besar */
+        width: 400px; /* Ukuran gambar lebih besar */
     }
     /* END Home Page desktop specific adjustments */
 
