@@ -172,6 +172,22 @@ body.home-page-active .footer {
         padding-top: 0;
     }
 
+    /* BEGIN Home Page desktop specific adjustments */
+    #homePage h1 {
+        font-size: 4.5rem; /* Ukuran font lebih besar untuk desktop */
+        margin-bottom: 30px; /* Jarak bawah sedikit lebih besar */
+    }
+
+    #homePage p {
+        font-size: 1.5rem; /* Ukuran font paragraf lebih besar */
+        max-width: 800px; /* Lebar maksimum paragraf lebih besar */
+    }
+
+    #homePage img {
+        width: 350px; /* Ukuran gambar lebih besar */
+    }
+    /* END Home Page desktop specific adjustments */
+
     #resepPage form.bg-card {
         max-height: 100%;
         overflow-y: auto; /* Form content scrolls if it overflows */
@@ -212,9 +228,10 @@ body.home-page-active .footer {
         margin-right: 0;
     }
 
-    #homePage img {
+    /* Original #homePage img was here, moved into specific adjustments */
+    /* #homePage img {
         width: 300px;
-    }
+    } */
 
     /* Bootstrap collapse override for desktop (always open) */
     .collapse:not(.show) {
