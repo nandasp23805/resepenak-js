@@ -120,6 +120,19 @@ body {
     height: auto;
 }
 
+/* --- Daftar Resep Page Styles --- */
+#daftarResepPage {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: #333;
+    /* Added for scrolling */
+    max-height: calc(100vh - 80px); /* Adjust based on navbar height, and add padding/margins */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+
 /* --- Footer Styles --- */
 .footer {
     background-color: MediumTurquoise;
@@ -162,6 +175,14 @@ body.home-page-active .footer {
     #resepPage form.bg-card {
         max-height: 100%;
         overflow-y: auto; /* Form content scrolls if it overflows */
+    }
+
+    /* Added for scrolling on desktop for #daftarResepPage */
+    #daftarResepPage {
+        max-height: calc(100vh - 80px - 40px); /* Navbar height + some extra padding/margin */
+        overflow-y: auto;
+        padding-bottom: 0;
+        padding-top: 0;
     }
 
     .navbar.fixed-top .container-fluid {
@@ -223,6 +244,12 @@ body.home-page-active .footer {
 
     #homePage, #resepPage {
         overflow-y: auto; /* Pages can scroll on mobile */
+    }
+
+    /* Added for scrolling on mobile for #daftarResepPage */
+    #daftarResepPage {
+        max-height: auto; /* Allow content to dictate height */
+        overflow-y: auto; /* Enable vertical scrolling */
     }
 
     .navbar-collapse {
