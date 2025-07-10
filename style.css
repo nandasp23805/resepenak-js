@@ -5,6 +5,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: 'Montserrat', sans-serif; /* Menambahkan font family secara global */
 }
 
 body {
@@ -39,7 +40,6 @@ body {
 .navbar.fixed-top {
     background-color: MediumTurquoise;
     padding: 1rem;
-    font-family: 'Montserrat', sans-serif;
     position: fixed;
     top: 0;
     left: 0;
@@ -107,12 +107,14 @@ body {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-#homePage p {
+#homePage h2 { /* Styling for "Temukan dan kelola..." */
     font-size: 1.2rem;
     max-width: 600px;
     color: black;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    margin-top: 10px; /* Tambahkan sedikit margin atas */
 }
+
 
 #homePage img {
     filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.7));
@@ -128,7 +130,7 @@ body {
     padding: 20px;
     color: #333;
     /* Added for scrolling */
-    max-height: calc(100vh - 80px); /* Adjust based on navbar height, and add padding/margins */
+    max-height: calc(100vh - 80px - 40px); /* Perbaikan: Tambah ruang ekstra di bawah */
     overflow-y: auto; /* Enable vertical scrolling */
 }
 
@@ -138,6 +140,8 @@ body {
     background-color: MediumTurquoise;
     color: white;
     margin-top: auto;
+    padding-bottom: 1rem; /* Tambah sedikit padding bawah agar tulisan tidak terlalu mepet */
+    padding-top: 1rem; /* Tambah sedikit padding atas */
     display: none; /* Hidden by default */
 }
 
@@ -182,8 +186,8 @@ body.home-page-active .footer {
         margin-bottom: 40px; /* Jarak bawah sedikit lebih besar */
     }
 
-    #homePage p {
-        font-size: 1.8rem; /* Ukuran font paragraf lebih besar lagi */
+    #homePage h2 { /* Ukuran font paragraf lebih besar lagi */
+        font-size: 1.8rem;
         max-width: 900px; /* Lebar maksimum paragraf lebih besar */
     }
 
@@ -199,7 +203,7 @@ body.home-page-active .footer {
 
     /* Added for scrolling on desktop for #daftarResepPage */
     #daftarResepPage {
-        max-height: calc(100vh - 80px - 40px); /* Navbar height + some extra padding/margin */
+        max-height: calc(100vh - 80px - 60px); /* Berikan lebih banyak ruang di desktop */
         overflow-y: auto;
         padding-bottom: 0;
         padding-top: 0;
@@ -231,11 +235,6 @@ body.home-page-active .footer {
     .navbar-nav .nav-item:last-child {
         margin-right: 0;
     }
-
-    /* Original #homePage img was here, moved into specific adjustments */
-    /* #homePage img {
-        width: 300px;
-    } */
 
     /* Bootstrap collapse override for desktop (always open) */
     .collapse:not(.show) {
